@@ -1,0 +1,18 @@
+aid: sentry
+url: https://raw.githubusercontent.com/api-evangelist/sentry/refs/heads/main/apis.yml
+apis:
+- aid: sentry:sentry-api
+  name: Sentry Error Monitoring API
+  tags:
+  - Error Monitoring
+  - Debugging
+  - Observability
+  - APM
+  image: https://raw.githubusercontent.com/api-evangelist/sentry/refs/heads/main/image.png
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  properties:
+  - url: https://docs.sentry.io/api/
+    type: Documentation
+  description: >-
+    Sentry provides error monitoring and performance tracking APIs for software applications. REST APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration across web, mobile, and backend applications.
