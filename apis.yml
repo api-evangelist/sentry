@@ -14,5 +14,86 @@ apis:
   properties:
   - url: https://docs.sentry.io/api/
     type: Documentation
+  - url: https://docs.sentry.io/api/
+    type: Reference
+  - url: https://docs.sentry.io/api/auth/
+    type: Authentication
+  - url: https://docs.sentry.io/api/ratelimits/
+    type: RateLimits
+  - url: https://docs.sentry.io/api/guides/create-auth-token/
+    type: GettingStarted
   description: >-
     Sentry provides error monitoring and performance tracking APIs for software applications. REST APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration across web, mobile, and backend applications.
+
+- aid: sentry:sentry-sdk-api
+  name: Sentry SDK API
+  tags:
+  - Error Monitoring
+  - Debugging
+  - Observability
+  - APM
+  - SDK
+  image: https://raw.githubusercontent.com/api-evangelist/sentry/refs/heads/main/image.png
+  humanURL: https://docs.sentry.io/platforms/
+  baseURL: https://sentry.io
+  properties:
+  - url: https://docs.sentry.io/platforms/
+    type: Documentation
+  - url: https://develop.sentry.dev/sdk/overview/
+    type: Reference
+  description: >-
+    Sentry provides official SDKs for 22+ platforms including JavaScript, Python, PHP, .NET, Java, Go, Ruby, Rust, Android, Apple, React Native, Unity, and Unreal Engine. Each SDK provides error capture, performance monitoring, session replay, and profiling capabilities.
+
+- aid: sentry:sentry-integration-platform
+  name: Sentry Integration Platform API
+  tags:
+  - Error Monitoring
+  - Integrations
+  - Webhooks
+  - OAuth
+  image: https://raw.githubusercontent.com/api-evangelist/sentry/refs/heads/main/image.png
+  humanURL: https://docs.sentry.io/api/integration/
+  baseURL: https://sentry.io/api/0
+  properties:
+  - url: https://docs.sentry.io/api/integration/
+    type: Documentation
+  - url: https://docs.sentry.io/api/auth/
+    type: Authentication
+  description: >-
+    The Sentry Integration Platform API enables building public and internal integrations with Sentry. Supports OAuth2 with PKCE, device authorization flow for CLI/CI environments, webhook notifications, and custom alert actions for third-party applications.
+
+common:
+- url: https://sentry.io/
+  type: Website
+- url: https://docs.sentry.io/api/
+  type: Portal
+- url: https://docs.sentry.io/api/
+  type: Documentation
+- url: https://docs.sentry.io/api/auth/
+  type: Authentication
+- url: https://docs.sentry.io/api/ratelimits/
+  type: RateLimits
+- url: https://docs.sentry.io/api/guides/create-auth-token/
+  type: GettingStarted
+- url: https://sentry.io/changelog/
+  type: ChangeLog
+- url: https://status.sentry.io/
+  type: Status
+- url: https://sentry.io/terms/
+  type: TermsOfService
+- url: https://sentry.io/legal/privacy/
+  type: PrivacyPolicy
+- url: https://sentry.io/blog/
+  type: Blog
+- url: https://docs.sentry.io/platforms/
+  type: SDKs
+- url: https://github.com/getsentry
+  type: GitHubOrganization
+- url: https://sandbox.sentry.io/
+  type: DeveloperTools
+
+maintainers:
+- name: Kin Lane
+  email: kin@apievangelist.com
+
+modified: '2026-03-18'
