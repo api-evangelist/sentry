@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "sentry": "https://sentry.io/vocab/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Issue": "sentry:Issue",
+    "Event": "sentry:Event",
+    "Project": "schema:SoftwareApplication",
+    "Organization": "schema:Organization",
+    "Release": "schema:SoftwareApplication",
+    "User": "schema:Person",
+
+    "id": "@id",
+    "shortId": "sentry:shortId",
+    "title": "schema:name",
+    "culprit": "sentry:culprit",
+    "permalink": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "level": "sentry:severityLevel",
+    "status": "sentry:status",
+    "platform": "schema:programmingLanguage",
+    "type": "sentry:issueType",
+    "metadata": "sentry:metadata",
+
+    "count": "sentry:eventCount",
+    "userCount": "sentry:affectedUserCount",
+    "numComments": "sentry:commentCount",
+    "firstSeen": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "lastSeen": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "assignedTo": "schema:contributor",
+    "tags": "schema:keywords",
+
+    "version": "schema:version",
+    "dateReleased": {
+      "@id": "schema:datePublished",
+      "@type": "xsd:dateTime"
+    },
+    "ref": "sentry:gitRef",
+
+    "name": "schema:name",
+    "slug": "sentry:slug",
+    "organization": {
+      "@id": "schema:memberOf",
+      "@type": "@id"
+    },
+    "project": {
+      "@id": "sentry:project",
+      "@type": "@id"
+    },
+
+    "message": "schema:description",
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "timestamp": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    }
+  }
+}

@@ -1,0 +1,363 @@
+asyncapi: 2.6.0
+info:
+  title: Sentry Integration Platform Webhooks
+  description: >-
+    Sentry Integration Platform delivers webhook notifications to registered
+    integrations when events occur in Sentry. Webhooks are sent as HTTP POST
+    requests signed with HMAC-SHA256 using the client secret.
+  version: "0"
+  contact:
+    name: Sentry Developer Documentation
+    url: https://docs.sentry.io/api/integration/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+
+servers:
+  sentry-webhook-delivery:
+    url: https://{your-integration-endpoint}/webhook
+    protocol: http
+    description: >-
+      Webhook endpoint registered in the Sentry Integration Platform.
+      Sentry POSTs signed payloads to this URL.
+    variables:
+      your-integration-endpoint:
+        description: Your registered webhook handler URL
+
+defaultContentType: application/json
+
+channels:
+  issue:
+    description: >-
+      Issue lifecycle events — created, resolved, assigned, archived,
+      unresolved, ignored.
+    subscribe:
+      operationId: receiveIssueEvent
+      summary: Issue lifecycle webhook
+      description: >-
+        Fired when an issue is created, resolved, assigned, archived,
+        or changes state. Used to sync Sentry issues with external ticketing
+        systems such as Jira, Linear, or custom workflows.
+      tags:
+        - name: Issues
+      message:
+        $ref: '#/components/messages/IssueEvent'
+
+  error:
+    description: >-
+      Individual error event notifications for new and recurring errors.
+    subscribe:
+      operationId: receiveErrorEvent
+      summary: Error event webhook
+      description: >-
+        Fired when a new error event is received that matches configured
+        alert rules. Delivers raw event data for custom alerting pipelines.
+      tags:
+        - name: Events
+      message:
+        $ref: '#/components/messages/ErrorEvent'
+
+  comment:
+    description: Comment activity on issues.
+    subscribe:
+      operationId: receiveCommentEvent
+      summary: Issue comment webhook
+      description: Fired when a comment is created, edited, or deleted on an issue.
+      tags:
+        - name: Issues
+      message:
+        $ref: '#/components/messages/CommentEvent'
+
+  install:
+    description: Integration install/uninstall lifecycle events.
+    subscribe:
+      operationId: receiveInstallEvent
+      summary: Integration install webhook
+      description: Fired when an organization installs or uninstalls your integration.
+      tags:
+        - name: Integration
+      message:
+        $ref: '#/components/messages/InstallEvent'
+
+  alert:
+    description: Metric alert threshold events.
+    subscribe:
+      operationId: receiveAlertEvent
+      summary: Metric alert webhook
+      description: >-
+        Fired when a metric alert transitions between triggered, warning,
+        and resolved states.
+      tags:
+        - name: Alerts
+      message:
+        $ref: '#/components/messages/AlertEvent'
+
+components:
+  messages:
+    IssueEvent:
+      name: IssueEvent
+      title: Issue Lifecycle Event
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          sentry-hook-signature:
+            type: string
+            description: HMAC-SHA256 signature for payload verification
+          sentry-hook-resource:
+            type: string
+            enum: [issue]
+          sentry-hook-timestamp:
+            type: string
+            format: date-time
+      payload:
+        type: object
+        required:
+          - action
+          - data
+          - actor
+          - installation
+        properties:
+          action:
+            type: string
+            enum: [created, resolved, assigned, archived, unresolved, ignored]
+          data:
+            type: object
+            properties:
+              issue:
+                $ref: '#/components/schemas/WebhookIssue'
+          actor:
+            $ref: '#/components/schemas/Actor'
+          installation:
+            type: object
+            properties:
+              uuid:
+                type: string
+
+    ErrorEvent:
+      name: ErrorEvent
+      title: Raw Error Event
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          sentry-hook-signature:
+            type: string
+          sentry-hook-resource:
+            type: string
+            enum: [event_alert]
+          sentry-hook-timestamp:
+            type: string
+            format: date-time
+      payload:
+        type: object
+        properties:
+          action:
+            type: string
+            enum: [triggered]
+          data:
+            type: object
+            properties:
+              event:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  project:
+                    type: string
+                  release:
+                    type: string
+                  environment:
+                    type: string
+                  platform:
+                    type: string
+                  message:
+                    type: string
+                  exception:
+                    type: object
+                  user:
+                    type: object
+                  tags:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+
+    CommentEvent:
+      name: CommentEvent
+      title: Issue Comment Event
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          sentry-hook-signature:
+            type: string
+          sentry-hook-resource:
+            type: string
+            enum: [comment]
+      payload:
+        type: object
+        properties:
+          action:
+            type: string
+            enum: [created, updated, deleted]
+          data:
+            type: object
+            properties:
+              comment:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  issue_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+          actor:
+            $ref: '#/components/schemas/Actor'
+
+    InstallEvent:
+      name: InstallEvent
+      title: Integration Installation Event
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          sentry-hook-signature:
+            type: string
+          sentry-hook-resource:
+            type: string
+            enum: [installation]
+      payload:
+        type: object
+        properties:
+          action:
+            type: string
+            enum: [created, deleted]
+          data:
+            type: object
+            properties:
+              installation:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                  status:
+                    type: string
+                    enum: [pending, installed]
+                  organization:
+                    type: object
+                    properties:
+                      slug:
+                        type: string
+                      name:
+                        type: string
+                  code:
+                    type: string
+                    description: OAuth authorization code for token exchange
+
+    AlertEvent:
+      name: AlertEvent
+      title: Metric Alert Event
+      contentType: application/json
+      headers:
+        type: object
+        properties:
+          sentry-hook-signature:
+            type: string
+          sentry-hook-resource:
+            type: string
+            enum: [metric_alert]
+      payload:
+        type: object
+        properties:
+          action:
+            type: string
+            enum: [resolved, warning, critical]
+          data:
+            type: object
+            properties:
+              metric_alert:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  alert_rule:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      threshold_type:
+                        type: integer
+                  status:
+                    type: string
+                  type:
+                    type: string
+                  date_started:
+                    type: string
+                    format: date-time
+                  date_closed:
+                    type: string
+                    format: date-time
+                    nullable: true
+
+  schemas:
+    WebhookIssue:
+      type: object
+      properties:
+        id:
+          type: string
+        shortId:
+          type: string
+        title:
+          type: string
+        culprit:
+          type: string
+        status:
+          type: string
+          enum: [resolved, unresolved, ignored]
+        level:
+          type: string
+          enum: [fatal, error, warning, info, debug]
+        project:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            slug:
+              type: string
+        firstSeen:
+          type: string
+          format: date-time
+        lastSeen:
+          type: string
+          format: date-time
+        count:
+          type: string
+        userCount:
+          type: integer
+        permalink:
+          type: string
+          format: uri
+
+    Actor:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [user, application]
+        id:
+          type: string
+        name:
+          type: string

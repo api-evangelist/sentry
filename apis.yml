@@ -22,6 +22,8 @@ apis:
     type: RateLimits
   - url: https://docs.sentry.io/api/guides/create-auth-token/
     type: GettingStarted
+  - url: openapi/sentry-api-openapi.yml
+    type: OpenAPI
   description: >-
     Sentry provides error monitoring and performance tracking APIs for software applications. REST APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration across web, mobile, and backend applications.
 
@@ -59,6 +61,8 @@ apis:
     type: Documentation
   - url: https://docs.sentry.io/api/auth/
     type: Authentication
+  - url: asyncapi/sentry-webhooks-asyncapi.yml
+    type: AsyncAPI
   description: >-
     The Sentry Integration Platform API enables building public and internal integrations with Sentry. Supports OAuth2 with PKCE, device authorization flow for CLI/CI environments, webhook notifications, and custom alert actions for third-party applications.
 
@@ -91,6 +95,10 @@ common:
   type: GitHubOrganization
 - url: https://sandbox.sentry.io/
   type: DeveloperTools
+- url: json-schema/sentry-issue-schema.json
+  type: JSONSchema
+- url: json-ld/sentry-context.jsonld
+  type: JSONLDContext
 
 maintainers:
 - name: Kin Lane

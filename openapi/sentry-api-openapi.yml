@@ -1,0 +1,796 @@
+openapi: 3.1.0
+info:
+  title: Sentry Error Monitoring API
+  description: >-
+    Sentry provides error monitoring and performance tracking REST APIs for software
+    applications. APIs enable issue management, event retrieval, release tracking,
+    alert configuration, and project administration. All endpoints are scoped to an
+    organization. Current API version is v0.
+  version: "0"
+  contact:
+    name: Sentry Support
+    url: https://sentry.io/support/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+servers:
+  - url: https://sentry.io/api/0
+    description: Sentry SaaS API
+
+security:
+  - AuthToken: []
+  - BearerAuth: []
+
+tags:
+  - name: Organizations
+    description: Organization-level resources
+  - name: Projects
+    description: Project management
+  - name: Issues
+    description: Error issues and aggregated events
+  - name: Events
+    description: Raw error events
+  - name: Releases
+    description: Release and deployment tracking
+  - name: Teams
+    description: Team management
+  - name: Alerts
+    description: Alert rules and notifications
+
+paths:
+  /organizations/:
+    get:
+      operationId: listOrganizations
+      summary: List organizations
+      description: Returns a list of organizations available to the authenticated user.
+      tags:
+        - Organizations
+      parameters:
+        - name: member
+          in: query
+          schema:
+            type: boolean
+          description: Restrict results to organizations where user is a member
+        - name: owner
+          in: query
+          schema:
+            type: boolean
+          description: Restrict results to organizations where user is an owner
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /organizations/{organization_slug}/:
+    get:
+      operationId: retrieveOrganization
+      summary: Retrieve an organization
+      description: Returns details for a specific organization.
+      tags:
+        - Organizations
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+      responses:
+        '200':
+          description: Organization details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /organizations/{organization_slug}/issues/:
+    get:
+      operationId: listOrganizationIssues
+      summary: List issues for an organization
+      description: >-
+        Returns a list of issues (error aggregations) for the organization.
+        Supports filtering by project, query, date range, status, and assignee.
+        Replaces the deprecated project-scoped issues endpoint.
+      tags:
+        - Issues
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: project
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Filter by project ID(s)
+        - name: query
+          in: query
+          schema:
+            type: string
+          description: Sentry query string (e.g., "is:unresolved assigned:me")
+          example: "is:unresolved"
+        - name: statsPeriod
+          in: query
+          schema:
+            type: string
+          description: Time range (e.g., 14d, 24h, 1h)
+          example: "14d"
+        - name: start
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+            maximum: 100
+        - name: cursor
+          in: query
+          schema:
+            type: string
+          description: Pagination cursor from previous response
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [date, new, priority, freq, user]
+          default: date
+      responses:
+        '200':
+          description: List of issues
+          headers:
+            Link:
+              schema:
+                type: string
+              description: Pagination links (rel=next, rel=previous)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+        '403':
+          description: Forbidden
+
+  /organizations/{organization_slug}/issues/{issue_id}/:
+    get:
+      operationId: retrieveIssue
+      summary: Retrieve an issue
+      description: Returns detailed stats and metadata for a specific issue.
+      tags:
+        - Issues
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: issue_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Issue ID
+      responses:
+        '200':
+          description: Issue details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '404':
+          description: Not found
+    put:
+      operationId: updateIssue
+      summary: Update an issue
+      description: Updates attributes of an issue such as status, assignee, or priority.
+      tags:
+        - Issues
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: issue_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueUpdate'
+      responses:
+        '200':
+          description: Issue updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '403':
+          description: Forbidden
+    delete:
+      operationId: deleteIssue
+      summary: Delete an issue
+      description: Permanently removes an issue and all associated events.
+      tags:
+        - Issues
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: issue_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Issue deletion queued
+        '403':
+          description: Forbidden
+
+  /organizations/{organization_slug}/issues/{issue_id}/events/:
+    get:
+      operationId: listIssueEvents
+      summary: List an issue's events
+      description: Returns a list of error events bound to an issue.
+      tags:
+        - Events
+        - Issues
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: issue_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: full
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Return full event data including stack traces
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /projects/{organization_slug}/{project_slug}/:
+    get:
+      operationId: retrieveProject
+      summary: Retrieve a project
+      description: Returns details for a specific project.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - $ref: '#/components/parameters/ProjectSlug'
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /organizations/{organization_slug}/projects/:
+    get:
+      operationId: listProjects
+      summary: List projects for an organization
+      description: Returns a list of projects within an organization.
+      tags:
+        - Projects
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+
+  /organizations/{organization_slug}/releases/:
+    get:
+      operationId: listReleases
+      summary: List releases for an organization
+      description: Returns a list of releases associated with the organization.
+      tags:
+        - Releases
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: query
+          in: query
+          schema:
+            type: string
+        - name: project
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 25
+      responses:
+        '200':
+          description: List of releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Release'
+    post:
+      operationId: createRelease
+      summary: Create a release
+      description: Creates a new release for tracking deployments and source maps.
+      tags:
+        - Releases
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseCreate'
+      responses:
+        '201':
+          description: Release created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+
+  /organizations/{organization_slug}/alert-rules/:
+    get:
+      operationId: listAlertRules
+      summary: List alert rules
+      description: Returns all metric and issue alert rules for an organization.
+      tags:
+        - Alerts
+      parameters:
+        - $ref: '#/components/parameters/OrganizationSlug'
+        - name: project
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of alert rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertRule'
+
+components:
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: "Format: Token YOUR_AUTH_TOKEN"
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: OAuth2 Bearer token for integrations
+
+  parameters:
+    OrganizationSlug:
+      name: organization_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization slug
+      example: "my-organization"
+    ProjectSlug:
+      name: project_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Project slug
+      example: "my-project"
+
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        status:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        features:
+          type: array
+          items:
+            type: string
+        avatar:
+          type: object
+          properties:
+            avatarType:
+              type: string
+            avatarUuid:
+              type: string
+        isEarlyAdopter:
+          type: boolean
+        requiresSso:
+          type: boolean
+        plan:
+          type: string
+        planDetails:
+          type: object
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+          example: "python"
+        dateCreated:
+          type: string
+          format: date-time
+        isBookmarked:
+          type: boolean
+        isMember:
+          type: boolean
+        features:
+          type: array
+          items:
+            type: string
+        firstEvent:
+          type: string
+          format: date-time
+        organization:
+          $ref: '#/components/schemas/OrganizationRef'
+        latestRelease:
+          type: object
+
+    OrganizationRef:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+
+    Issue:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique issue ID
+        shortId:
+          type: string
+          description: Short issue ID (ORG-XXX format)
+          example: "MYORG-42"
+        title:
+          type: string
+          description: Issue title (exception type and message)
+        culprit:
+          type: string
+          description: Module/function causing the error
+        permalink:
+          type: string
+          format: uri
+        logger:
+          type: string
+        level:
+          type: string
+          enum: [fatal, error, warning, info, debug]
+        status:
+          type: string
+          enum: [resolved, unresolved, ignored, resolvedInNextRelease]
+        isPublic:
+          type: boolean
+        platform:
+          type: string
+        project:
+          $ref: '#/components/schemas/ProjectRef'
+        type:
+          type: string
+          enum: [error, csp, hpkp, expectct, expectstaple, default]
+        metadata:
+          type: object
+        numComments:
+          type: integer
+        userCount:
+          type: integer
+        count:
+          type: string
+          description: Total event count
+        firstSeen:
+          type: string
+          format: date-time
+        lastSeen:
+          type: string
+          format: date-time
+        assignedTo:
+          type: object
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              name:
+                type: string
+              totalValues:
+                type: integer
+        stats:
+          type: object
+          description: Event count stats by time period
+
+    ProjectRef:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+
+    IssueUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [resolved, unresolved, ignored, resolvedInNextRelease]
+        assignedTo:
+          type: string
+          description: User username or team slug
+        hasSeen:
+          type: boolean
+        isBookmarked:
+          type: boolean
+        isSubscribed:
+          type: boolean
+        priority:
+          type: string
+          enum: [critical, high, medium, low]
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        groupId:
+          type: string
+          description: Parent issue ID
+        dateCreated:
+          type: string
+          format: date-time
+        dateReceived:
+          type: string
+          format: date-time
+        type:
+          type: string
+        platform:
+          type: string
+        message:
+          type: string
+        title:
+          type: string
+        location:
+          type: string
+        culprit:
+          type: string
+        level:
+          type: string
+          enum: [fatal, error, warning, info, debug]
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+        user:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            username:
+              type: string
+            ipAddress:
+              type: string
+        sdk:
+          type: object
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        contexts:
+          type: object
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [exception, stacktrace, breadcrumbs, request, message, template]
+              data:
+                type: object
+
+    Release:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        shortVersion:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        dateReleased:
+          type: string
+          format: date-time
+        firstEvent:
+          type: string
+          format: date-time
+        lastEvent:
+          type: string
+          format: date-time
+        newGroups:
+          type: integer
+        commitCount:
+          type: integer
+        deployCount:
+          type: integer
+        authors:
+          type: array
+          items:
+            type: object
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRef'
+        ref:
+          type: string
+          description: Git ref (branch or tag)
+        url:
+          type: string
+          format: uri
+
+    ReleaseCreate:
+      type: object
+      required:
+        - version
+      properties:
+        version:
+          type: string
+          description: Release version string
+        ref:
+          type: string
+          description: Optional git ref
+        url:
+          type: string
+          format: uri
+        projects:
+          type: array
+          items:
+            type: string
+          description: List of project slugs
+        dateReleased:
+          type: string
+          format: date-time
+        commits:
+          type: array
+          items:
+            type: object
+
+    AlertRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        environment:
+          type: string
+        dataset:
+          type: string
+          enum: [events, transactions, sessions, metrics]
+        query:
+          type: string
+        aggregate:
+          type: string
+        timeWindow:
+          type: integer
+          description: Time window in minutes
+        thresholdType:
+          type: integer
+        resolveThreshold:
+          type: number
+        triggers:
+          type: array
+          items:
+            type: object
+        projects:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+        errors:
+          type: object

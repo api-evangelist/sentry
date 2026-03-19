@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentry.io/schemas/issue",
+  "title": "Sentry Issue",
+  "description": "A Sentry issue — an aggregation of similar error events grouped by fingerprint",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique issue identifier"
+    },
+    "shortId": {
+      "type": "string",
+      "description": "Human-readable issue ID in ORG-XXX format",
+      "pattern": "^[A-Z0-9]+-\\d+$",
+      "examples": ["MYORG-42"]
+    },
+    "title": {
+      "type": "string",
+      "description": "Issue title — exception type and message"
+    },
+    "culprit": {
+      "type": "string",
+      "description": "Module or function identified as the culprit"
+    },
+    "permalink": {
+      "type": "string",
+      "format": "uri",
+      "description": "Direct URL to the issue in Sentry UI"
+    },
+    "logger": {
+      "type": "string",
+      "description": "Logger name that captured the error"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["fatal", "error", "warning", "info", "debug"],
+      "description": "Severity level"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["resolved", "unresolved", "ignored", "resolvedInNextRelease"],
+      "description": "Current issue status"
+    },
+    "isPublic": {
+      "type": "boolean",
+      "description": "Whether the issue is publicly visible"
+    },
+    "platform": {
+      "type": "string",
+      "description": "SDK platform (python, javascript, java, etc.)",
+      "examples": ["python", "javascript", "java", "dotnet", "go"]
+    },
+    "project": {
+      "$ref": "#/$defs/ProjectRef"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["error", "csp", "hpkp", "expectct", "expectstaple", "default"],
+      "description": "Issue type"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Issue-type-specific metadata",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Exception type"
+        },
+        "value": {
+          "type": "string",
+          "description": "Exception message"
+        },
+        "filename": {
+          "type": "string"
+        },
+        "function": {
+          "type": "string"
+        }
+      }
+    },
+    "numComments": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "userCount": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of distinct users affected"
+    },
+    "count": {
+      "type": "string",
+      "description": "Total event count (string representation)"
+    },
+    "firstSeen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the first event for this issue"
+    },
+    "lastSeen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the most recent event"
+    },
+    "assignedTo": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["user", "team"]
+            },
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        }
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tag statistics for this issue",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "totalValues": {
+            "type": "integer"
+          }
+        },
+        "required": ["key", "name"]
+      }
+    },
+    "stats": {
+      "type": "object",
+      "description": "Event count statistics keyed by period (e.g., 24h, 14d)",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "integer", "description": "Unix timestamp"},
+            {"type": "integer", "description": "Event count"}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low"]
+    },
+    "isSubscribed": {
+      "type": "boolean"
+    },
+    "isBookmarked": {
+      "type": "boolean"
+    }
+  },
+  "required": ["id", "title", "status", "firstSeen", "lastSeen"],
+  "$defs": {
+    "ProjectRef": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "name", "slug"]
+    }
+  }
+}
