@@ -22,21 +22,19 @@ security:
   - BearerAuth: []
 
 tags:
+  - name: Alerts
+    description: Alert rules and notifications
+
+  - name: Events
+    description: Raw error events
+  - name: Issues
+    description: Error issues and aggregated events
   - name: Organizations
     description: Organization-level resources
   - name: Projects
     description: Project management
-  - name: Issues
-    description: Error issues and aggregated events
-  - name: Events
-    description: Raw error events
   - name: Releases
     description: Release and deployment tracking
-  - name: Teams
-    description: Team management
-  - name: Alerts
-    description: Alert rules and notifications
-
 paths:
   /organizations/:
     get:
