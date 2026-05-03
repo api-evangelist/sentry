@@ -1,0 +1,321 @@
+name: Sentry Vocabulary
+description: >-
+  Domain vocabulary for the Sentry error monitoring and observability platform.
+  Covers core concepts in error tracking, performance monitoring, release management,
+  and integration workflows.
+version: "0"
+created: '2026-05-02'
+modified: '2026-05-02'
+
+terms:
+  # Core Error Monitoring Concepts
+  - term: Issue
+    definition: >-
+      An aggregation of similar error events grouped by fingerprint. A single
+      production bug typically generates many individual events that Sentry groups
+      into one issue for triage. Issues have a status lifecycle: unresolved →
+      resolved → regressed.
+    synonyms:
+      - Error
+      - Bug
+      - Group
+    related:
+      - Event
+      - Fingerprint
+      - Status
+
+  - term: Event
+    definition: >-
+      A single occurrence of an error or performance problem captured by a Sentry
+      SDK. Events contain the full stack trace, breadcrumbs, user context, tags,
+      and environment metadata at the moment of failure.
+    synonyms:
+      - Error Event
+      - Occurrence
+    related:
+      - Issue
+      - Breadcrumb
+      - Stack Trace
+
+  - term: Fingerprint
+    definition: >-
+      The signature Sentry computes to group related events into the same issue.
+      By default fingerprints are derived from the stack trace and exception type.
+      Custom fingerprints enable manual grouping strategies.
+    related:
+      - Issue
+      - Grouping
+
+  - term: Breadcrumb
+    definition: >-
+      A chronological log entry captured by the SDK just before an error occurred.
+      Breadcrumbs form a trail showing what happened before the failure: HTTP
+      requests, UI clicks, log messages, navigation events.
+    related:
+      - Event
+
+  - term: Stack Trace
+    definition: >-
+      The call stack at the time the error was thrown, including file names, line
+      numbers, and in-app frame markers. Sentry enhances stack traces with source
+      map lookups for minified JavaScript.
+    related:
+      - Event
+      - Source Map
+
+  - term: Source Map
+    definition: >-
+      A mapping file that translates minified/compiled JavaScript back to the
+      original source code. Sentry uses source maps uploaded at release time to
+      un-minify stack traces in the UI.
+    related:
+      - Release
+      - Stack Trace
+
+  # Project and Organization
+  - term: Organization
+    definition: >-
+      The top-level container for Sentry resources. An organization has members,
+      projects, teams, alert rules, and integrations. All API endpoints are scoped
+      to an organization via the organization_slug path parameter.
+    related:
+      - Project
+      - Team
+      - Member
+
+  - term: Project
+    definition: >-
+      A logical container for a specific application or service within an
+      organization. Issues, releases, and alert rules belong to projects. A single
+      organization can have many projects.
+    related:
+      - Organization
+      - Issue
+      - Release
+
+  - term: Team
+    definition: >-
+      A group of organization members responsible for one or more projects.
+      Issues can be assigned to teams. Alert rules notify teams via the connected
+      notification channels.
+    related:
+      - Organization
+      - Project
+      - Member
+
+  # Release and Deployment
+  - term: Release
+    definition: >-
+      A named version of your application deployed to one or more environments.
+      Releases link commits to issues to identify which deploy introduced a
+      regression. Source maps and debug symbols are uploaded per release.
+    synonyms:
+      - Deployment
+      - Version
+    related:
+      - Commit
+      - Deploy
+      - Source Map
+
+  - term: Deploy
+    definition: >-
+      A record of a release being deployed to a specific environment (production,
+      staging, etc.). Deploys help Sentry identify whether an issue was introduced
+      or regressed in a specific environment.
+    related:
+      - Release
+      - Environment
+
+  - term: Environment
+    definition: >-
+      A named context such as "production", "staging", or "development". Issues
+      and performance data are segmented by environment so teams can filter out
+      noise from non-production errors.
+    related:
+      - Release
+      - Deploy
+
+  # Status and Triage
+  - term: Status
+    definition: >-
+      The triage state of an issue. Valid values are unresolved, resolved, ignored,
+      and resolvedInNextRelease. Resolving an issue suppresses notifications until
+      it regresses in a new release.
+    values:
+      - unresolved
+      - resolved
+      - ignored
+      - resolvedInNextRelease
+    related:
+      - Issue
+      - Regression
+
+  - term: Regression
+    definition: >-
+      When a previously resolved issue reappears in a new release. Sentry
+      automatically re-opens the issue and notifies the team. Regressions are
+      linked to the specific release that re-introduced the error.
+    related:
+      - Status
+      - Release
+
+  - term: Priority
+    definition: >-
+      A manual or AI-assisted severity ranking for an issue: critical, high,
+      medium, or low. Priority signals to the team which issues to address first
+      and drives Sentry's issue triage features.
+    values:
+      - critical
+      - high
+      - medium
+      - low
+    related:
+      - Issue
+
+  # Performance Monitoring
+  - term: Transaction
+    definition: >-
+      A performance monitoring span representing an end-to-end operation such as
+      a web request, background job, or user flow. Transactions are sampled and
+      have duration, status, and associated spans.
+    related:
+      - Span
+      - Performance
+
+  - term: Span
+    definition: >-
+      A unit of work within a transaction representing a database query, HTTP call,
+      cache lookup, or other operation. Spans form a tree structure with the
+      transaction as the root.
+    related:
+      - Transaction
+
+  # Alerting
+  - term: Alert Rule
+    definition: >-
+      A condition that triggers a notification when an error rate, metric, or
+      issue count crosses a threshold. Sentry supports metric alerts and issue
+      alerts with configurable triggers, thresholds, and notification channels.
+    synonyms:
+      - Alert
+      - Monitor
+    related:
+      - Trigger
+      - Notification
+
+  - term: Trigger
+    definition: >-
+      The threshold condition within an alert rule that transitions the alert
+      between warning, critical, and resolved states. Multiple triggers can be
+      defined per alert rule.
+    related:
+      - Alert Rule
+
+  # Integration
+  - term: Integration
+    definition: >-
+      A connection between Sentry and an external service such as Slack, Jira,
+      PagerDuty, GitHub, or a custom webhook. Integrations can sync issues,
+      send notifications, and trigger workflows.
+    related:
+      - Webhook
+      - OAuth
+
+  - term: Webhook
+    definition: >-
+      An HTTP callback that Sentry sends to a registered URL when events occur
+      (issue created, alert triggered, etc.). Webhook payloads are signed with
+      HMAC-SHA256 using the client secret.
+    related:
+      - Integration
+
+  # Authentication
+  - term: Auth Token
+    definition: >-
+      A user-scoped or organization-scoped API token used to authenticate REST API
+      requests. Tokens are passed in the Authorization header as "Bearer TOKEN".
+      Org auth tokens (sntryu_ prefix) are the recommended approach for CI/CD.
+    synonyms:
+      - API Key
+      - Bearer Token
+    related:
+      - OAuth
+
+  - term: DSN
+    definition: >-
+      Data Source Name — the project-specific URL the Sentry SDK uses to route
+      events to the correct project. DSNs contain the protocol, public key,
+      project host, and project ID. Never used for REST API auth.
+    related:
+      - Project
+
+  - term: OAuth
+    definition: >-
+      The OAuth 2.0 authorization flow used by Integration Platform integrations.
+      Supports standard authorization code flow with PKCE and device authorization
+      flow for headless environments (CI/CD, CLI tools).
+    related:
+      - Auth Token
+      - Integration
+
+  # Observability
+  - term: Session Replay
+    definition: >-
+      A recording of a user's browser session captured by the Sentry browser SDK.
+      Replays are linked to error events, enabling developers to watch exactly
+      what happened before an error occurred.
+    related:
+      - Event
+
+  - term: Profiling
+    definition: >-
+      Continuous sampling of function call stacks to identify CPU-intensive code
+      paths. Profiles are correlated with transactions to pinpoint performance
+      bottlenecks at the function level.
+    related:
+      - Transaction
+
+  - term: Cron Monitor
+    definition: >-
+      A Sentry feature that verifies scheduled jobs (cron jobs) check in on time.
+      If a job is late or misses its window, Sentry raises an alert.
+    synonyms:
+      - Cron Check-In
+    related:
+      - Alert Rule
+
+categories:
+  - name: Error Tracking
+    terms:
+      - Issue
+      - Event
+      - Fingerprint
+      - Breadcrumb
+      - Stack Trace
+      - Regression
+  - name: Project Management
+    terms:
+      - Organization
+      - Project
+      - Team
+      - Release
+      - Deploy
+      - Environment
+  - name: Performance
+    terms:
+      - Transaction
+      - Span
+      - Session Replay
+      - Profiling
+  - name: Alerting
+    terms:
+      - Alert Rule
+      - Trigger
+      - Cron Monitor
+  - name: Integrations and Auth
+    terms:
+      - Integration
+      - Webhook
+      - Auth Token
+      - DSN
+      - OAuth

@@ -1,0 +1,562 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Sentry Error Monitoring API"
+  description: >-
+    Sentry REST API v0 for issue management, event retrieval, release tracking,
+    alert configuration, and project administration. All endpoints are scoped to
+    an organization.
+  tags:
+    - Error Monitoring
+    - Debugging
+    - Observability
+    - Application Performance Management
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      SENTRY_AUTH_TOKEN: SENTRY_AUTH_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: sentry-api
+      baseUri: https://sentry.io/api/0
+      description: "Sentry REST API for error monitoring and project management"
+      authentication:
+        type: bearer
+        token: "{{SENTRY_AUTH_TOKEN}}"
+      resources:
+        - name: organizations
+          path: /organizations/
+          description: "Organization-level resources and management"
+          operations:
+            - name: list-organizations
+              method: GET
+              description: "Returns a list of organizations available to the authenticated user"
+              inputParameters:
+                - name: member
+                  in: query
+                  type: boolean
+                  required: false
+                  description: "Restrict results to organizations where user is a member"
+                - name: owner
+                  in: query
+                  type: boolean
+                  required: false
+                  description: "Restrict results to organizations where user is an owner"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: retrieve-organization
+          path: /organizations/{organization_slug}/
+          description: "Retrieve details for a specific organization"
+          operations:
+            - name: retrieve-organization
+              method: GET
+              description: "Returns details for a specific organization"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: issues
+          path: /organizations/{organization_slug}/issues/
+          description: "Issue management for an organization"
+          operations:
+            - name: list-organization-issues
+              method: GET
+              description: "Returns a list of issues for the organization"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: query
+                  in: query
+                  type: string
+                  required: false
+                  description: "Sentry query string (e.g., is:unresolved assigned:me)"
+                - name: statsPeriod
+                  in: query
+                  type: string
+                  required: false
+                  description: "Time range (e.g., 14d, 24h, 1h)"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum results to return (max 100)"
+                - name: cursor
+                  in: query
+                  type: string
+                  required: false
+                  description: "Pagination cursor from previous response"
+                - name: sort
+                  in: query
+                  type: string
+                  required: false
+                  description: "Sort order: date, new, priority, freq, user"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: issue
+          path: /organizations/{organization_slug}/issues/{issue_id}/
+          description: "Individual issue operations"
+          operations:
+            - name: retrieve-issue
+              method: GET
+              description: "Returns detailed stats and metadata for a specific issue"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: issue_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "Issue ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: update-issue
+              method: PUT
+              description: "Updates attributes of an issue such as status, assignee, or priority"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: issue_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "Issue ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  status: "{{tools.status}}"
+                  assignedTo: "{{tools.assigned_to}}"
+                  priority: "{{tools.priority}}"
+
+            - name: delete-issue
+              method: DELETE
+              description: "Permanently removes an issue and all associated events"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: issue_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "Issue ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: issue-events
+          path: /organizations/{organization_slug}/issues/{issue_id}/events/
+          description: "Events bound to a specific issue"
+          operations:
+            - name: list-issue-events
+              method: GET
+              description: "Returns a list of error events bound to an issue"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: issue_id
+                  in: path
+                  type: string
+                  required: true
+                  description: "Issue ID"
+                - name: full
+                  in: query
+                  type: boolean
+                  required: false
+                  description: "Return full event data including stack traces"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum results to return"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: projects
+          path: /organizations/{organization_slug}/projects/
+          description: "Project listing for an organization"
+          operations:
+            - name: list-projects
+              method: GET
+              description: "Returns a list of projects within an organization"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: query
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter projects by name"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum results to return"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: project
+          path: /projects/{organization_slug}/{project_slug}/
+          description: "Individual project operations"
+          operations:
+            - name: retrieve-project
+              method: GET
+              description: "Returns details for a specific project"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: project_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Project slug"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: releases
+          path: /organizations/{organization_slug}/releases/
+          description: "Release management for an organization"
+          operations:
+            - name: list-releases
+              method: GET
+              description: "Returns a list of releases associated with the organization"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: query
+                  in: query
+                  type: string
+                  required: false
+                  description: "Filter releases by version string"
+                - name: project
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Filter by project ID"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum results to return"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+            - name: create-release
+              method: POST
+              description: "Creates a new release for tracking deployments and source maps"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  version: "{{tools.version}}"
+                  ref: "{{tools.ref}}"
+                  url: "{{tools.url}}"
+                  projects: "{{tools.projects}}"
+                  dateReleased: "{{tools.date_released}}"
+
+        - name: alert-rules
+          path: /organizations/{organization_slug}/alert-rules/
+          description: "Alert rule management for an organization"
+          operations:
+            - name: list-alert-rules
+              method: GET
+              description: "Returns all metric and issue alert rules for an organization"
+              inputParameters:
+                - name: organization_slug
+                  in: path
+                  type: string
+                  required: true
+                  description: "Organization slug"
+                - name: project
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Filter by project ID"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: sentry-rest
+      resources:
+        - path: /v1/organizations
+          name: organizations
+          description: "Manage Sentry organizations"
+          operations:
+            - method: GET
+              name: list-organizations
+              description: "List all accessible organizations"
+              call: "sentry-api.list-organizations"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/organizations/{organization_slug}/issues
+          name: issues
+          description: "Manage issues within an organization"
+          operations:
+            - method: GET
+              name: list-organization-issues
+              description: "List issues for an organization"
+              call: "sentry-api.list-organization-issues"
+              with:
+                organization_slug: "rest.organization_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/organizations/{organization_slug}/issues/{issue_id}
+          name: issue
+          description: "Retrieve or update a specific issue"
+          operations:
+            - method: GET
+              name: retrieve-issue
+              description: "Get a specific issue"
+              call: "sentry-api.retrieve-issue"
+              with:
+                organization_slug: "rest.organization_slug"
+                issue_id: "rest.issue_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PUT
+              name: update-issue
+              description: "Update issue status, assignee, or priority"
+              call: "sentry-api.update-issue"
+              with:
+                organization_slug: "rest.organization_slug"
+                issue_id: "rest.issue_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/organizations/{organization_slug}/releases
+          name: releases
+          description: "Manage releases for an organization"
+          operations:
+            - method: GET
+              name: list-releases
+              description: "List releases for an organization"
+              call: "sentry-api.list-releases"
+              with:
+                organization_slug: "rest.organization_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-release
+              description: "Create a new release"
+              call: "sentry-api.create-release"
+              with:
+                organization_slug: "rest.organization_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/organizations/{organization_slug}/alert-rules
+          name: alert-rules
+          description: "Manage alert rules for an organization"
+          operations:
+            - method: GET
+              name: list-alert-rules
+              description: "List all alert rules for an organization"
+              call: "sentry-api.list-alert-rules"
+              with:
+                organization_slug: "rest.organization_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: sentry-mcp
+      transport: http
+      tools:
+        - name: list-organizations
+          description: "List all Sentry organizations accessible to the authenticated token"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-organizations"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-issues
+          description: "List issues in a Sentry organization with filtering by query, date range, and sort"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-organization-issues"
+          with:
+            organization_slug: "tools.organization_slug"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: retrieve-issue
+          description: "Get detailed stats and metadata for a specific Sentry issue"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.retrieve-issue"
+          with:
+            organization_slug: "tools.organization_slug"
+            issue_id: "tools.issue_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: update-issue
+          description: "Update a Sentry issue — change status to resolved/ignored, reassign, or change priority"
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "sentry-api.update-issue"
+          with:
+            organization_slug: "tools.organization_slug"
+            issue_id: "tools.issue_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-issue-events
+          description: "List raw error events for a specific Sentry issue including stack traces"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-issue-events"
+          with:
+            organization_slug: "tools.organization_slug"
+            issue_id: "tools.issue_id"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-projects
+          description: "List all projects within a Sentry organization"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-projects"
+          with:
+            organization_slug: "tools.organization_slug"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-releases
+          description: "List releases for a Sentry organization"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-releases"
+          with:
+            organization_slug: "tools.organization_slug"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-release
+          description: "Create a new Sentry release for tracking deployments and source maps"
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "sentry-api.create-release"
+          with:
+            organization_slug: "tools.organization_slug"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-alert-rules
+          description: "List all metric and issue alert rules for a Sentry organization"
+          hints:
+            readOnly: true
+            idempotent: true
+          call: "sentry-api.list-alert-rules"
+          with:
+            organization_slug: "tools.organization_slug"
+          outputParameters:
+            - type: object
+              mapping: "$."

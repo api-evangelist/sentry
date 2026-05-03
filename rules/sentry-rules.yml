@@ -1,0 +1,154 @@
+extends: spectral:oas
+rules:
+
+  # Sentry API uses trailing slashes on all paths
+  sentry-paths-trailing-slash:
+    description: Sentry API paths must end with a trailing slash
+    message: "Path '{{value}}' must end with a trailing slash (/)"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "/$"
+
+  # All operations must have an operationId
+  sentry-operation-id-required:
+    description: All operations must have an operationId
+    message: "Operation must have an operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: defined
+
+  # operationId must use camelCase
+  sentry-operation-id-camel-case:
+    description: Sentry operationIds use camelCase (listIssues, createRelease, etc.)
+    message: "operationId '{{value}}' must use camelCase"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  # All operations must have a summary
+  sentry-operation-summary-required:
+    description: All operations must have a summary
+    message: "Operation must have a summary"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: defined
+
+  # All operations must have a description
+  sentry-operation-description-required:
+    description: All operations must have a description
+    message: "Operation should have a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: description
+      function: defined
+
+  # All operations must have at least one tag
+  sentry-operation-tags-required:
+    description: All operations must be tagged
+    message: "Operation must have at least one tag"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: length
+      functionOptions:
+        min: 1
+
+  # Tags must match defined tags in the root tags object
+  sentry-valid-tags:
+    description: Operations must use tags from the defined tag list
+    message: "Tag '{{value}}' is not in the global tags list"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].tags[*]"
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - Alerts
+          - Events
+          - Issues
+          - Organizations
+          - Projects
+          - Releases
+
+  # organization_slug path parameter must use $ref
+  sentry-org-slug-ref:
+    description: organization_slug path parameter should use $ref to the shared parameter definition
+    message: "organization_slug parameter should use $ref: '#/components/parameters/OrganizationSlug'"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].parameters[?(@.name=='organization_slug')]"
+    then:
+      field: "$ref"
+      function: defined
+
+  # GET list operations should support pagination
+  sentry-list-operations-pagination:
+    description: GET operations returning arrays should include cursor and limit pagination parameters
+    message: "List operation should support limit and cursor pagination"
+    severity: info
+    given: "$.paths[*].get"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          properties:
+            parameters:
+              type: array
+          required:
+            - parameters
+
+  # All parameters must have descriptions
+  sentry-parameter-description:
+    description: All parameters must have descriptions
+    message: "Parameter '{{value}}' must have a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].parameters[*]"
+    then:
+      field: description
+      function: defined
+
+  # Responses must define at least 200/201 and 4xx
+  sentry-response-success-required:
+    description: Operations must define at least one success response (200 or 201)
+    message: "Operation must have a 200 or 201 response defined"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+            - required: ["200"]
+            - required: ["201"]
+            - required: ["202"]
+
+  # Security must be defined at operation or global level
+  sentry-security-defined:
+    description: Sentry API requires authentication on all endpoints
+    message: "Global security scheme must be defined"
+    severity: error
+    given: "$"
+    then:
+      field: security
+      function: defined
+
+  # Schema components must be defined for reusable objects
+  sentry-components-schemas-defined:
+    description: API must define reusable schemas in components
+    message: "components.schemas must be defined"
+    severity: warn
+    given: "$.components"
+    then:
+      field: schemas
+      function: defined

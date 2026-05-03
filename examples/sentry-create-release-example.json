@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://sentry.io/api/0/organizations/my-organization/releases/",
+    "headers": {
+      "Authorization": "Bearer sntryu_YOUR_AUTH_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "version": "2.4.1",
+      "ref": "main",
+      "url": "https://github.com/my-org/my-app/releases/tag/2.4.1",
+      "projects": ["my-frontend", "my-backend"],
+      "dateReleased": "2026-05-02T15:00:00.000Z",
+      "commits": [
+        {
+          "id": "abc123def456",
+          "message": "Fix: resolve undefined map error in Dashboard",
+          "author_name": "Jane Developer",
+          "author_email": "jane@example.com",
+          "timestamp": "2026-05-02T14:30:00.000Z"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 55443,
+      "version": "2.4.1",
+      "shortVersion": "2.4.1",
+      "dateCreated": "2026-05-02T15:00:05.000Z",
+      "dateReleased": "2026-05-02T15:00:00.000Z",
+      "firstEvent": null,
+      "lastEvent": null,
+      "newGroups": 0,
+      "commitCount": 1,
+      "deployCount": 0,
+      "authors": [
+        {"name": "Jane Developer", "email": "jane@example.com"}
+      ],
+      "projects": [
+        {"id": "111", "name": "my-frontend", "slug": "my-frontend"},
+        {"id": "222", "name": "my-backend", "slug": "my-backend"}
+      ],
+      "ref": "main",
+      "url": "https://github.com/my-org/my-app/releases/tag/2.4.1"
+    }
+  }
+}

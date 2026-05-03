@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "PUT",
+    "url": "https://sentry.io/api/0/organizations/my-organization/issues/9876543/",
+    "headers": {
+      "Authorization": "Bearer sntryu_YOUR_AUTH_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "resolved",
+      "assignedTo": "jane.developer",
+      "hasSeen": true,
+      "isBookmarked": false,
+      "priority": "high"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": "9876543",
+      "shortId": "MYORG-42",
+      "title": "TypeError: Cannot read property 'map' of undefined",
+      "culprit": "components/Dashboard.render",
+      "permalink": "https://my-organization.sentry.io/issues/9876543/",
+      "level": "error",
+      "status": "resolved",
+      "isPublic": false,
+      "platform": "javascript",
+      "project": {
+        "id": "111",
+        "name": "my-frontend",
+        "slug": "my-frontend"
+      },
+      "assignedTo": {
+        "type": "user",
+        "id": "88",
+        "name": "Jane Developer",
+        "email": "jane@example.com"
+      },
+      "priority": "high",
+      "firstSeen": "2026-04-10T08:23:11.000Z",
+      "lastSeen": "2026-05-02T14:55:00.000Z",
+      "count": "1243",
+      "userCount": 147
+    }
+  }
+}

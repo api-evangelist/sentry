@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://sentry.io/api/0/organizations/",
+    "headers": {
+      "Authorization": "Bearer sntryu_YOUR_AUTH_TOKEN",
+      "Content-Type": "application/json"
+    },
+    "queryParameters": {
+      "member": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": [
+      {
+        "id": "1234567",
+        "slug": "my-organization",
+        "name": "My Organization",
+        "dateCreated": "2022-01-15T10:00:00.000Z",
+        "status": {
+          "id": "active",
+          "name": "active"
+        },
+        "features": [
+          "performance-view",
+          "session-replay",
+          "profiling"
+        ],
+        "avatar": {
+          "avatarType": "letter_avatar",
+          "avatarUuid": null
+        },
+        "isEarlyAdopter": false,
+        "requiresSso": false,
+        "plan": "team",
+        "planDetails": {
+          "name": "Team",
+          "maxProjects": 50,
+          "maxMembers": 25
+        }
+      }
+    ]
+  }
+}
