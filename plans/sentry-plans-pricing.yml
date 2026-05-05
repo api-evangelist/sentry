@@ -1,0 +1,162 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Sentry
+providerId: sentry
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Error Monitoring
+  - APM
+  - Tracing
+  - Session Replay
+description: Sentry plans across Developer / Team / Business / Enterprise. Pay-as-you-go for additional
+  volume.
+sources:
+  - https://sentry.io/pricing/
+plans:
+  - id: sentry-developer
+    name: Developer
+    type: freemium
+    description: Free; 5K errors, 5M spans; one user.
+    entries:
+      - label: Errors
+        name: errors
+        type: quota
+        metric: error
+        limit: 5000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Spans (tracing)
+        name: spans
+        type: quota
+        metric: span
+        limit: 5000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Session replays
+        name: replays
+        type: quota
+        metric: replay
+        limit: 50
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Users
+        name: users
+        type: quota
+        metric: user
+        limit: 1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Error monitoring + tracing
+      - name: Email alerts
+      - name: 10 custom dashboards
+      - name: 1 uptime monitor
+      - name: 1 cron monitor
+      - name: 1 GB attachments
+  - id: sentry-team
+    name: Team
+    type: paid
+    description: $26/month annual.
+    entries:
+      - label: Monthly base
+        name: base
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '26.00'
+        userMultiplied: false
+      - label: Errors included
+        name: errors
+        type: quota
+        metric: error
+        limit: 50000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Spans included
+        name: spans
+        type: quota
+        metric: span
+        limit: 5000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Unlimited users
+      - name: Third-party integrations
+      - name: 20 dashboards
+      - name: AI debugging agent (subscription)
+      - name: Pay-as-you-go for volume
+  - id: sentry-business
+    name: Business
+    type: paid
+    description: $80/month annual. Insights, anomaly detection, SAML+SCIM.
+    entries:
+      - label: Monthly base
+        name: base
+        type: subscription
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '80.00'
+        userMultiplied: false
+      - label: Errors included
+        name: errors
+        type: quota
+        metric: error
+        limit: 50000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Insights with 90-day lookback
+      - name: Unlimited dashboards
+      - name: Unlimited metric alerts + anomaly detection
+      - name: Advanced quota management
+      - name: SAML + SCIM
+  - id: sentry-enterprise
+    name: Enterprise
+    type: enterprise
+    description: Custom pricing.
+    entries:
+      - label: Annual (custom)
+        name: seat
+        type: subscription
+        metric: user
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: custom
+        userMultiplied: true
+    elements:
+      - name: Technical account manager
+      - name: Dedicated support
+      - name: Custom data retention
+      - name: Data residency
