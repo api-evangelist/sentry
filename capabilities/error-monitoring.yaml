@@ -1,332 +1,618 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Sentry Error Monitoring"
-  description: >-
-    Unified capability for error monitoring, issue triage, release management,
-    and alerting workflows using the Sentry API. Enables DevOps engineers and
-    SREs to investigate production errors, triage and assign issues, track
-    releases, and manage alert rules from a single interface.
+  label: Sentry Error Monitoring
+  description: Unified capability for error monitoring, issue triage, release management, and alerting workflows using the
+    Sentry API. Enables DevOps engineers and SREs to investigate production errors, triage and assign issues, track releases,
+    and manage alert rules from a single interface.
   tags:
-    - Error Monitoring
-    - Debugging
-    - Observability
-    - Application Performance Management
-    - DevOps
-    - Site Reliability Engineering
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - Error Monitoring
+  - Debugging
+  - Observability
+  - Application Performance Management
+  - DevOps
+  - Site Reliability Engineering
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      SENTRY_AUTH_TOKEN: SENTRY_AUTH_TOKEN
-
+- namespace: env
+  keys:
+    SENTRY_AUTH_TOKEN: SENTRY_AUTH_TOKEN
 capability:
   consumes:
-    - import: sentry-api
-      location: ./shared/sentry-api.yaml
-
+  - type: http
+    namespace: sentry-api
+    baseUri: https://sentry.io/api/0
+    description: Sentry REST API for error monitoring and project management
+    authentication:
+      type: bearer
+      token: '{{SENTRY_AUTH_TOKEN}}'
+    resources:
+    - name: organizations
+      path: /organizations/
+      description: Organization-level resources and management
+      operations:
+      - name: list-organizations
+        method: GET
+        description: Returns a list of organizations available to the authenticated user
+        inputParameters:
+        - name: member
+          in: query
+          type: boolean
+          required: false
+          description: Restrict results to organizations where user is a member
+        - name: owner
+          in: query
+          type: boolean
+          required: false
+          description: Restrict results to organizations where user is an owner
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: retrieve-organization
+      path: /organizations/{organization_slug}/
+      description: Retrieve details for a specific organization
+      operations:
+      - name: retrieve-organization
+        method: GET
+        description: Returns details for a specific organization
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: issues
+      path: /organizations/{organization_slug}/issues/
+      description: Issue management for an organization
+      operations:
+      - name: list-organization-issues
+        method: GET
+        description: Returns a list of issues for the organization
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: query
+          in: query
+          type: string
+          required: false
+          description: Sentry query string (e.g., is:unresolved assigned:me)
+        - name: statsPeriod
+          in: query
+          type: string
+          required: false
+          description: Time range (e.g., 14d, 24h, 1h)
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum results to return (max 100)
+        - name: cursor
+          in: query
+          type: string
+          required: false
+          description: Pagination cursor from previous response
+        - name: sort
+          in: query
+          type: string
+          required: false
+          description: 'Sort order: date, new, priority, freq, user'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: issue
+      path: /organizations/{organization_slug}/issues/{issue_id}/
+      description: Individual issue operations
+      operations:
+      - name: retrieve-issue
+        method: GET
+        description: Returns detailed stats and metadata for a specific issue
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: issue_id
+          in: path
+          type: string
+          required: true
+          description: Issue ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-issue
+        method: PUT
+        description: Updates attributes of an issue such as status, assignee, or priority
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: issue_id
+          in: path
+          type: string
+          required: true
+          description: Issue ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            status: '{{tools.status}}'
+            assignedTo: '{{tools.assigned_to}}'
+            priority: '{{tools.priority}}'
+      - name: delete-issue
+        method: DELETE
+        description: Permanently removes an issue and all associated events
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: issue_id
+          in: path
+          type: string
+          required: true
+          description: Issue ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: issue-events
+      path: /organizations/{organization_slug}/issues/{issue_id}/events/
+      description: Events bound to a specific issue
+      operations:
+      - name: list-issue-events
+        method: GET
+        description: Returns a list of error events bound to an issue
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: issue_id
+          in: path
+          type: string
+          required: true
+          description: Issue ID
+        - name: full
+          in: query
+          type: boolean
+          required: false
+          description: Return full event data including stack traces
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum results to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects
+      path: /organizations/{organization_slug}/projects/
+      description: Project listing for an organization
+      operations:
+      - name: list-projects
+        method: GET
+        description: Returns a list of projects within an organization
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: query
+          in: query
+          type: string
+          required: false
+          description: Filter projects by name
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum results to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: project
+      path: /projects/{organization_slug}/{project_slug}/
+      description: Individual project operations
+      operations:
+      - name: retrieve-project
+        method: GET
+        description: Returns details for a specific project
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: project_slug
+          in: path
+          type: string
+          required: true
+          description: Project slug
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: releases
+      path: /organizations/{organization_slug}/releases/
+      description: Release management for an organization
+      operations:
+      - name: list-releases
+        method: GET
+        description: Returns a list of releases associated with the organization
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: query
+          in: query
+          type: string
+          required: false
+          description: Filter releases by version string
+        - name: project
+          in: query
+          type: integer
+          required: false
+          description: Filter by project ID
+        - name: limit
+          in: query
+          type: integer
+          required: false
+          description: Maximum results to return
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-release
+        method: POST
+        description: Creates a new release for tracking deployments and source maps
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            version: '{{tools.version}}'
+            ref: '{{tools.ref}}'
+            url: '{{tools.url}}'
+            projects: '{{tools.projects}}'
+            dateReleased: '{{tools.date_released}}'
+    - name: alert-rules
+      path: /organizations/{organization_slug}/alert-rules/
+      description: Alert rule management for an organization
+      operations:
+      - name: list-alert-rules
+        method: GET
+        description: Returns all metric and issue alert rules for an organization
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          required: true
+          description: Organization slug
+        - name: project
+          in: query
+          type: integer
+          required: false
+          description: Filter by project ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: sentry-error-monitoring-api
-      description: "Unified REST API for Sentry error monitoring and issue triage workflows."
-      resources:
-        - path: /v1/organizations
-          name: organizations
-          description: "List and inspect Sentry organizations"
-          operations:
-            - method: GET
-              name: list-organizations
-              description: "List all Sentry organizations accessible to the API token"
-              call: "sentry-api.list-organizations"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/issues
-          name: issues
-          description: "Browse and search issues within an organization"
-          operations:
-            - method: GET
-              name: list-organization-issues
-              description: "List and filter issues for an organization"
-              call: "sentry-api.list-organization-issues"
-              with:
-                organization_slug: "rest.organization_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/issues/{issue_id}
-          name: issue
-          description: "Retrieve or update a specific issue"
-          operations:
-            - method: GET
-              name: retrieve-issue
-              description: "Get detailed information about a specific issue"
-              call: "sentry-api.retrieve-issue"
-              with:
-                organization_slug: "rest.organization_slug"
-                issue_id: "rest.issue_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PUT
-              name: update-issue
-              description: "Update issue status, priority, or assignee"
-              call: "sentry-api.update-issue"
-              with:
-                organization_slug: "rest.organization_slug"
-                issue_id: "rest.issue_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/issues/{issue_id}/events
-          name: issue-events
-          description: "Retrieve raw error events for a specific issue"
-          operations:
-            - method: GET
-              name: list-issue-events
-              description: "List error events bound to a specific issue"
-              call: "sentry-api.list-issue-events"
-              with:
-                organization_slug: "rest.organization_slug"
-                issue_id: "rest.issue_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/projects
-          name: projects
-          description: "Browse projects within an organization"
-          operations:
-            - method: GET
-              name: list-projects
-              description: "List all projects in a Sentry organization"
-              call: "sentry-api.list-projects"
-              with:
-                organization_slug: "rest.organization_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/projects/{organization_slug}/{project_slug}
-          name: project
-          description: "Retrieve a specific project"
-          operations:
-            - method: GET
-              name: retrieve-project
-              description: "Get details for a specific project"
-              call: "sentry-api.retrieve-project"
-              with:
-                organization_slug: "rest.organization_slug"
-                project_slug: "rest.project_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/releases
-          name: releases
-          description: "Track releases and deployments"
-          operations:
-            - method: GET
-              name: list-releases
-              description: "List releases for a Sentry organization"
-              call: "sentry-api.list-releases"
-              with:
-                organization_slug: "rest.organization_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-release
-              description: "Create a new release for deployment tracking"
-              call: "sentry-api.create-release"
-              with:
-                organization_slug: "rest.organization_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-        - path: /v1/organizations/{organization_slug}/alert-rules
-          name: alert-rules
-          description: "Manage metric and issue alert rules"
-          operations:
-            - method: GET
-              name: list-alert-rules
-              description: "List all alert rules for a Sentry organization"
-              call: "sentry-api.list-alert-rules"
-              with:
-                organization_slug: "rest.organization_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: sentry-error-monitoring-mcp
-      transport: http
-      description: "MCP server for AI-assisted error monitoring, issue triage, and release tracking with Sentry."
-      tools:
-        - name: list-organizations
-          description: "List all Sentry organizations accessible to the authenticated token"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-organizations"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-issues
-          description: >-
-            Search and filter Sentry issues. Use the query parameter with Sentry
-            query syntax (e.g., 'is:unresolved assigned:me', 'level:error'). Use
-            statsPeriod to control the time window (14d, 24h, 1h).
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-organization-issues"
-          with:
-            organization_slug: "tools.organization_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: retrieve-issue
-          description: "Get full details, stats, and metadata for a specific Sentry issue by ID"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.retrieve-issue"
-          with:
-            organization_slug: "tools.organization_slug"
-            issue_id: "tools.issue_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: resolve-issue
-          description: >-
-            Mark a Sentry issue as resolved. Sets status to 'resolved'. Use when
-            a developer confirms the bug has been fixed and deployed.
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "sentry-api.update-issue"
-          with:
-            organization_slug: "tools.organization_slug"
-            issue_id: "tools.issue_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: assign-issue
-          description: >-
-            Assign a Sentry issue to a user or team. Provide the username or team
-            slug as the assignedTo value.
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "sentry-api.update-issue"
-          with:
-            organization_slug: "tools.organization_slug"
-            issue_id: "tools.issue_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: update-issue-priority
-          description: "Change the priority of a Sentry issue (critical, high, medium, low)"
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "sentry-api.update-issue"
-          with:
-            organization_slug: "tools.organization_slug"
-            issue_id: "tools.issue_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-issue-events
-          description: >-
-            List raw error events for a Sentry issue including full stack traces.
-            Set full=true to get complete stack trace data for debugging.
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-issue-events"
-          with:
-            organization_slug: "tools.organization_slug"
-            issue_id: "tools.issue_id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-projects
-          description: "List all projects in a Sentry organization"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-projects"
-          with:
-            organization_slug: "tools.organization_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: retrieve-project
-          description: "Get details for a specific Sentry project by slug"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.retrieve-project"
-          with:
-            organization_slug: "tools.organization_slug"
-            project_slug: "tools.project_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-releases
-          description: "List releases for a Sentry organization with optional filtering by project or version"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-releases"
-          with:
-            organization_slug: "tools.organization_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: create-release
-          description: >-
-            Create a new Sentry release to track a deployment. Associate commits
-            for automatic issue attribution. Upload source maps separately after
-            release creation.
-          hints:
-            readOnly: false
-            idempotent: false
-          call: "sentry-api.create-release"
-          with:
-            organization_slug: "tools.organization_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
-
-        - name: list-alert-rules
-          description: "List all metric and issue alert rules configured for a Sentry organization"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "sentry-api.list-alert-rules"
-          with:
-            organization_slug: "tools.organization_slug"
-          outputParameters:
-            - type: object
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: sentry-error-monitoring-api
+    description: Unified REST API for Sentry error monitoring and issue triage workflows.
+    resources:
+    - path: /v1/organizations
+      name: organizations
+      description: List and inspect Sentry organizations
+      operations:
+      - method: GET
+        name: list-organizations
+        description: List all Sentry organizations accessible to the API token
+        call: sentry-api.list-organizations
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/issues
+      name: issues
+      description: Browse and search issues within an organization
+      operations:
+      - method: GET
+        name: list-organization-issues
+        description: List and filter issues for an organization
+        call: sentry-api.list-organization-issues
+        with:
+          organization_slug: rest.organization_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/issues/{issue_id}
+      name: issue
+      description: Retrieve or update a specific issue
+      operations:
+      - method: GET
+        name: retrieve-issue
+        description: Get detailed information about a specific issue
+        call: sentry-api.retrieve-issue
+        with:
+          organization_slug: rest.organization_slug
+          issue_id: rest.issue_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: update-issue
+        description: Update issue status, priority, or assignee
+        call: sentry-api.update-issue
+        with:
+          organization_slug: rest.organization_slug
+          issue_id: rest.issue_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/issues/{issue_id}/events
+      name: issue-events
+      description: Retrieve raw error events for a specific issue
+      operations:
+      - method: GET
+        name: list-issue-events
+        description: List error events bound to a specific issue
+        call: sentry-api.list-issue-events
+        with:
+          organization_slug: rest.organization_slug
+          issue_id: rest.issue_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/projects
+      name: projects
+      description: Browse projects within an organization
+      operations:
+      - method: GET
+        name: list-projects
+        description: List all projects in a Sentry organization
+        call: sentry-api.list-projects
+        with:
+          organization_slug: rest.organization_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{organization_slug}/{project_slug}
+      name: project
+      description: Retrieve a specific project
+      operations:
+      - method: GET
+        name: retrieve-project
+        description: Get details for a specific project
+        call: sentry-api.retrieve-project
+        with:
+          organization_slug: rest.organization_slug
+          project_slug: rest.project_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/releases
+      name: releases
+      description: Track releases and deployments
+      operations:
+      - method: GET
+        name: list-releases
+        description: List releases for a Sentry organization
+        call: sentry-api.list-releases
+        with:
+          organization_slug: rest.organization_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-release
+        description: Create a new release for deployment tracking
+        call: sentry-api.create-release
+        with:
+          organization_slug: rest.organization_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization_slug}/alert-rules
+      name: alert-rules
+      description: Manage metric and issue alert rules
+      operations:
+      - method: GET
+        name: list-alert-rules
+        description: List all alert rules for a Sentry organization
+        call: sentry-api.list-alert-rules
+        with:
+          organization_slug: rest.organization_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: sentry-error-monitoring-mcp
+    transport: http
+    description: MCP server for AI-assisted error monitoring, issue triage, and release tracking with Sentry.
+    tools:
+    - name: list-organizations
+      description: List all Sentry organizations accessible to the authenticated token
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-organizations
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-issues
+      description: Search and filter Sentry issues. Use the query parameter with Sentry query syntax (e.g., 'is:unresolved
+        assigned:me', 'level:error'). Use statsPeriod to control the time window (14d, 24h, 1h).
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-organization-issues
+      with:
+        organization_slug: tools.organization_slug
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-issue
+      description: Get full details, stats, and metadata for a specific Sentry issue by ID
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.retrieve-issue
+      with:
+        organization_slug: tools.organization_slug
+        issue_id: tools.issue_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resolve-issue
+      description: Mark a Sentry issue as resolved. Sets status to 'resolved'. Use when a developer confirms the bug has been
+        fixed and deployed.
+      hints:
+        readOnly: false
+        idempotent: true
+      call: sentry-api.update-issue
+      with:
+        organization_slug: tools.organization_slug
+        issue_id: tools.issue_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: assign-issue
+      description: Assign a Sentry issue to a user or team. Provide the username or team slug as the assignedTo value.
+      hints:
+        readOnly: false
+        idempotent: true
+      call: sentry-api.update-issue
+      with:
+        organization_slug: tools.organization_slug
+        issue_id: tools.issue_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-issue-priority
+      description: Change the priority of a Sentry issue (critical, high, medium, low)
+      hints:
+        readOnly: false
+        idempotent: true
+      call: sentry-api.update-issue
+      with:
+        organization_slug: tools.organization_slug
+        issue_id: tools.issue_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-issue-events
+      description: List raw error events for a Sentry issue including full stack traces. Set full=true to get complete stack
+        trace data for debugging.
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-issue-events
+      with:
+        organization_slug: tools.organization_slug
+        issue_id: tools.issue_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-projects
+      description: List all projects in a Sentry organization
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-projects
+      with:
+        organization_slug: tools.organization_slug
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-project
+      description: Get details for a specific Sentry project by slug
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.retrieve-project
+      with:
+        organization_slug: tools.organization_slug
+        project_slug: tools.project_slug
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-releases
+      description: List releases for a Sentry organization with optional filtering by project or version
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-releases
+      with:
+        organization_slug: tools.organization_slug
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-release
+      description: Create a new Sentry release to track a deployment. Associate commits for automatic issue attribution. Upload
+        source maps separately after release creation.
+      hints:
+        readOnly: false
+        idempotent: false
+      call: sentry-api.create-release
+      with:
+        organization_slug: tools.organization_slug
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-alert-rules
+      description: List all metric and issue alert rules configured for a Sentry organization
+      hints:
+        readOnly: true
+        idempotent: true
+      call: sentry-api.list-alert-rules
+      with:
+        organization_slug: tools.organization_slug
+      outputParameters:
+      - type: object
+        mapping: $.
