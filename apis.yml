@@ -149,6 +149,11 @@ common:
     sources:
       - https://sentry.io/pricing/
     updated: '2026-05-04'
+  - type: Integrations
+    url: https://sentry.io/integrations/
+integrations:
+  - name: Github
+  - name: Slack
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
