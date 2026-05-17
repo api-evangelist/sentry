@@ -96,7 +96,7 @@ common:
     url: https://docs.sentry.io/api/guides/create-auth-token/
   - type: ChangeLog
     url: https://sentry.io/changelog/
-  - type: Status
+  - type: StatusPage
     url: https://status.sentry.io/
   - type: TermsOfService
     url: https://sentry.io/terms/
