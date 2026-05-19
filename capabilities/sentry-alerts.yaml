@@ -1,0 +1,78 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sentry Error Monitoring API — Alerts
+  description: 'Sentry Error Monitoring API — Alerts. 1 operations. Lead operation: List alert rules. Self-contained Naftiko
+    capability covering one Sentry business surface.'
+  tags:
+  - Sentry
+  - Alerts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SENTRY_API_KEY: SENTRY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sentry-alerts
+    baseUri: https://sentry.io/api/0
+    description: Sentry Error Monitoring API — Alerts business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organization_slug-alert-rules
+      path: /organizations/{organization_slug}/alert-rules/
+      operations:
+      - name: listalertrules
+        method: GET
+        description: List alert rules
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: project
+          in: query
+          type: integer
+    authentication:
+      type: bearer
+      token: '{{env.SENTRY_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sentry-alerts-rest
+    port: 8080
+    description: REST adapter for Sentry Error Monitoring API — Alerts. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/organizations/{organization-slug}/alert-rules
+      name: organizations-organization-slug-alert-rules
+      description: REST surface for organizations-organization_slug-alert-rules.
+      operations:
+      - method: GET
+        name: listalertrules
+        description: List alert rules
+        call: sentry-alerts.listalertrules
+        with:
+          project: rest.project
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sentry-alerts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sentry Error Monitoring API — Alerts. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-alert-rules
+      description: List alert rules
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sentry-alerts.listalertrules
+      with:
+        project: tools.project
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,90 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sentry Error Monitoring API — Events
+  description: 'Sentry Error Monitoring API — Events. 1 operations. Lead operation: List an issue''s events. Self-contained
+    Naftiko capability covering one Sentry business surface.'
+  tags:
+  - Sentry
+  - Events
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SENTRY_API_KEY: SENTRY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sentry-events
+    baseUri: https://sentry.io/api/0
+    description: Sentry Error Monitoring API — Events business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations-organization_slug-issues-issue_id-events
+      path: /organizations/{organization_slug}/issues/{issue_id}/events/
+      operations:
+      - name: listissueevents
+        method: GET
+        description: List an issue's events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: issue_id
+          in: path
+          type: string
+          required: true
+        - name: full
+          in: query
+          type: boolean
+          description: Return full event data including stack traces
+        - name: limit
+          in: query
+          type: integer
+    authentication:
+      type: bearer
+      token: '{{env.SENTRY_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sentry-events-rest
+    port: 8080
+    description: REST adapter for Sentry Error Monitoring API — Events. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/organizations/{organization-slug}/issues/{issue-id}/events
+      name: organizations-organization-slug-issues-issue-id-events
+      description: REST surface for organizations-organization_slug-issues-issue_id-events.
+      operations:
+      - method: GET
+        name: listissueevents
+        description: List an issue's events
+        call: sentry-events.listissueevents
+        with:
+          issue_id: rest.issue_id
+          full: rest.full
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sentry-events-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sentry Error Monitoring API — Events. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-issue-s-events
+      description: List an issue's events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sentry-events.listissueevents
+      with:
+        issue_id: tools.issue_id
+        full: tools.full
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.

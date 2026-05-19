@@ -1,0 +1,117 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Sentry Error Monitoring API — Organizations
+  description: 'Sentry Error Monitoring API — Organizations. 2 operations. Lead operation: List organizations. Self-contained
+    Naftiko capability covering one Sentry business surface.'
+  tags:
+  - Sentry
+  - Organizations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SENTRY_API_KEY: SENTRY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: sentry-organizations
+    baseUri: https://sentry.io/api/0
+    description: Sentry Error Monitoring API — Organizations business capability. Self-contained, no shared references.
+    resources:
+    - name: organizations
+      path: /organizations/
+      operations:
+      - name: listorganizations
+        method: GET
+        description: List organizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: member
+          in: query
+          type: boolean
+          description: Restrict results to organizations where user is a member
+        - name: owner
+          in: query
+          type: boolean
+          description: Restrict results to organizations where user is an owner
+    - name: organizations-organization_slug
+      path: /organizations/{organization_slug}/
+      operations:
+      - name: retrieveorganization
+        method: GET
+        description: Retrieve an organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.SENTRY_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: sentry-organizations-rest
+    port: 8080
+    description: REST adapter for Sentry Error Monitoring API — Organizations. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/organizations
+      name: organizations
+      description: REST surface for organizations.
+      operations:
+      - method: GET
+        name: listorganizations
+        description: List organizations
+        call: sentry-organizations.listorganizations
+        with:
+          member: rest.member
+          owner: rest.owner
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{organization-slug}
+      name: organizations-organization-slug
+      description: REST surface for organizations-organization_slug.
+      operations:
+      - method: GET
+        name: retrieveorganization
+        description: Retrieve an organization
+        call: sentry-organizations.retrieveorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: sentry-organizations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Sentry Error Monitoring API — Organizations. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-organizations
+      description: List organizations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sentry-organizations.listorganizations
+      with:
+        member: tools.member
+        owner: tools.owner
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-organization
+      description: Retrieve an organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: sentry-organizations.retrieveorganization
+      outputParameters:
+      - type: object
+        mapping: $.
