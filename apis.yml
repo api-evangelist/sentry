@@ -164,6 +164,8 @@ common:
   updated: '2026-05-04'
 - type: Integrations
   url: https://sentry.io/integrations/
+- type: LLMsTxt
+  url: https://docs.sentry.io/llms.txt
 integrations:
 - name: Github
 - name: Slack
