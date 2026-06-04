@@ -1,0 +1,124 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Organization Monitoring Survey
+  summary: Resolve an organization, then inventory its projects, releases, and alert rules.
+  description: >-
+    An onboarding and audit pattern. The workflow selects an organization from
+    the authenticated user's memberships, retrieves its full detail, branches on
+    whether any organization is available, and then inventories the
+    organization's projects, releases, and alert rules to produce a single
+    monitoring-coverage snapshot. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: organization-survey
+  summary: Inventory an organization's projects, releases, and alert rules in one pass.
+  description: >-
+    Lists the user's member organizations, retrieves the first one's detail, and
+    then surveys its projects, releases, and configured alert rules to assess
+    monitoring coverage. Ends early when the user belongs to no organizations.
+  inputs:
+    type: object
+    properties:
+      limit:
+        type: integer
+        description: Maximum number of items to return from each list step.
+        default: 25
+  steps:
+  - stepId: findOrganization
+    description: >-
+      List the organizations the authenticated user is a member of and select
+      the first to survey.
+    operationId: listOrganizations
+    parameters:
+    - name: member
+      in: query
+      value: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      organizationSlug: $response.body#/0/slug
+      organizationName: $response.body#/0/name
+    onSuccess:
+    - name: orgFound
+      type: goto
+      stepId: getOrganization
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: noOrg
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: getOrganization
+    description: >-
+      Retrieve full detail for the selected organization, including plan and
+      feature flags.
+    operationId: retrieveOrganization
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $steps.findOrganization.outputs.organizationSlug
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      organizationId: $response.body#/id
+      plan: $response.body#/plan
+  - stepId: listProjects
+    description: >-
+      List the organization's projects to enumerate the monitored applications.
+    operationId: listProjects
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $steps.findOrganization.outputs.organizationSlug
+    - name: limit
+      in: query
+      value: $inputs.limit
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstProjectSlug: $response.body#/0/slug
+  - stepId: listReleases
+    description: >-
+      List the organization's releases to confirm deployment tracking is in
+      place.
+    operationId: listReleases
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $steps.findOrganization.outputs.organizationSlug
+    - name: limit
+      in: query
+      value: $inputs.limit
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      latestReleaseVersion: $response.body#/0/version
+  - stepId: listAlertRules
+    description: >-
+      List the organization's metric and issue alert rules to assess alerting
+      coverage.
+    operationId: listAlertRules
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $steps.findOrganization.outputs.organizationSlug
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstAlertRuleName: $response.body#/0/name
+  outputs:
+    organizationSlug: $steps.findOrganization.outputs.organizationSlug
+    organizationId: $steps.getOrganization.outputs.organizationId
+    firstProjectSlug: $steps.listProjects.outputs.firstProjectSlug
+    latestReleaseVersion: $steps.listReleases.outputs.latestReleaseVersion
+    firstAlertRuleName: $steps.listAlertRules.outputs.firstAlertRuleName

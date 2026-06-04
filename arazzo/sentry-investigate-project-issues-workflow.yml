@@ -1,0 +1,148 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Investigate a Project's Issues
+  summary: Confirm a project, list its issues, then drill into the top issue's detail and events.
+  description: >-
+    A project-scoped investigation pattern. The workflow retrieves a project to
+    resolve its numeric id, lists the organization's issues filtered to that
+    project, branches on whether any issues were returned, then retrieves the
+    top issue and its recent events for root-cause analysis. Every step spells
+    out its request inline so the flow can be read and executed without opening
+    the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: investigate-project-issues
+  summary: Drill from a project into its top issue and that issue's recent events.
+  description: >-
+    Resolves a project's numeric id, lists issues filtered to that project,
+    retrieves the highest-priority issue, and pulls its recent error events.
+    Ends early when the project has no matching issues.
+  inputs:
+    type: object
+    required:
+    - organizationSlug
+    - projectSlug
+    properties:
+      organizationSlug:
+        type: string
+        description: The organization slug that owns the project.
+      projectSlug:
+        type: string
+        description: The project slug to investigate.
+      query:
+        type: string
+        description: Sentry query used to filter the project's issues.
+        default: "is:unresolved"
+      statsPeriod:
+        type: string
+        description: Time range window for the issue search (e.g. 24h, 14d).
+        default: "24h"
+  steps:
+  - stepId: getProject
+    description: >-
+      Retrieve the project to confirm it exists and to resolve its numeric id
+      for filtering the organization issue list.
+    operationId: retrieveProject
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: project_slug
+      in: path
+      value: $inputs.projectSlug
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      projectId: $response.body#/id
+      projectName: $response.body#/name
+  - stepId: listProjectIssues
+    description: >-
+      List the organization's issues scoped to the resolved project id, sorted
+      by priority, returning the top candidate to investigate.
+    operationId: listOrganizationIssues
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: project
+      in: query
+      value: $steps.getProject.outputs.projectId
+    - name: query
+      in: query
+      value: $inputs.query
+    - name: statsPeriod
+      in: query
+      value: $inputs.statsPeriod
+    - name: sort
+      in: query
+      value: priority
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      issueId: $response.body#/0/id
+      issueTitle: $response.body#/0/title
+    onSuccess:
+    - name: issueFound
+      type: goto
+      stepId: getIssueDetail
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: noIssues
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: getIssueDetail
+    description: >-
+      Retrieve detailed stats and metadata for the selected project issue.
+    operationId: retrieveIssue
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.listProjectIssues.outputs.issueId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      culprit: $response.body#/culprit
+      level: $response.body#/level
+      lastSeen: $response.body#/lastSeen
+  - stepId: listIssueEvents
+    description: >-
+      Pull the issue's recent error events with full data for stack-trace level
+      investigation.
+    operationId: listIssueEvents
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.listProjectIssues.outputs.issueId
+    - name: full
+      in: query
+      value: true
+    - name: limit
+      in: query
+      value: 10
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      latestEventId: $response.body#/0/eventId
+  outputs:
+    projectId: $steps.getProject.outputs.projectId
+    issueId: $steps.listProjectIssues.outputs.issueId
+    culprit: $steps.getIssueDetail.outputs.culprit
+    latestEventId: $steps.listIssueEvents.outputs.latestEventId

@@ -1,0 +1,153 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Triage and Resolve an Issue
+  summary: Find the most relevant unresolved issue, inspect its events, then resolve or reprioritize it.
+  description: >-
+    A core Sentry incident-response pattern. The workflow lists an
+    organization's unresolved issues using a Sentry query, branches on whether
+    any issues were returned, retrieves the top issue's detail, pulls its most
+    recent error events for context, and then updates the issue to a resolved
+    status with a priority. Every step spells out its request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: triage-issue
+  summary: Triage the top unresolved issue in an organization and resolve it.
+  description: >-
+    Lists unresolved issues for the organization sorted by frequency, selects
+    the first match, retrieves its full detail and recent events, then marks the
+    issue resolved with an explicit priority. Branches to end when no
+    unresolved issues exist.
+  inputs:
+    type: object
+    required:
+    - organizationSlug
+    properties:
+      organizationSlug:
+        type: string
+        description: The organization slug that owns the issues (e.g. my-organization).
+      query:
+        type: string
+        description: Sentry query string used to filter issues.
+        default: "is:unresolved"
+      statsPeriod:
+        type: string
+        description: Time range window for the issue search (e.g. 14d, 24h).
+        default: "14d"
+      priority:
+        type: string
+        description: Priority to set when resolving the issue.
+        default: "high"
+  steps:
+  - stepId: findTopIssue
+    description: >-
+      List the organization's issues matching the supplied query, sorted by
+      frequency, returning at most one result to triage first.
+    operationId: listOrganizationIssues
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: query
+      in: query
+      value: $inputs.query
+    - name: statsPeriod
+      in: query
+      value: $inputs.statsPeriod
+    - name: sort
+      in: query
+      value: freq
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      topIssueId: $response.body#/0/id
+      topIssueShortId: $response.body#/0/shortId
+    onSuccess:
+    - name: issueFound
+      type: goto
+      stepId: getIssueDetail
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: noIssues
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: getIssueDetail
+    description: >-
+      Retrieve full stats and metadata for the selected issue so the triage
+      decision is made against current data.
+    operationId: retrieveIssue
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findTopIssue.outputs.topIssueId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      issueTitle: $response.body#/title
+      issueLevel: $response.body#/level
+      issueCount: $response.body#/count
+  - stepId: listRecentEvents
+    description: >-
+      Pull the most recent error events bound to the issue, including full
+      stack-trace data, to confirm the cause before resolving.
+    operationId: listIssueEvents
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findTopIssue.outputs.topIssueId
+    - name: full
+      in: query
+      value: true
+    - name: limit
+      in: query
+      value: 5
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      latestEventId: $response.body#/0/eventId
+  - stepId: resolveIssue
+    description: >-
+      Mark the issue resolved and assign an explicit priority so it leaves the
+      unresolved queue.
+    operationId: updateIssue
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findTopIssue.outputs.topIssueId
+    requestBody:
+      contentType: application/json
+      payload:
+        status: resolved
+        priority: $inputs.priority
+        hasSeen: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      resolvedStatus: $response.body#/status
+  outputs:
+    issueId: $steps.findTopIssue.outputs.topIssueId
+    issueShortId: $steps.findTopIssue.outputs.topIssueShortId
+    issueTitle: $steps.getIssueDetail.outputs.issueTitle
+    latestEventId: $steps.listRecentEvents.outputs.latestEventId
+    resolvedStatus: $steps.resolveIssue.outputs.resolvedStatus

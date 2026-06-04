@@ -1,0 +1,133 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Escalate and Assign an Issue
+  summary: Find a high-severity unresolved issue, review its events, then escalate priority and assign an owner.
+  description: >-
+    An escalation pattern for on-call response. The workflow searches for an
+    unresolved fatal or error-level issue, branches on whether one was found,
+    inspects its most recent events for context, and then escalates the issue by
+    setting a critical priority and assigning it to a team or user while marking
+    it seen and subscribed. Every step spells out its request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: escalate-issue
+  summary: Escalate the top high-severity unresolved issue and assign it to an owner.
+  description: >-
+    Lists unresolved high-severity issues sorted by frequency, selects the top
+    one, reviews its recent events, then updates it with a critical priority and
+    an assignee. Ends early when no matching issue is found.
+  inputs:
+    type: object
+    required:
+    - organizationSlug
+    - assignTo
+    properties:
+      organizationSlug:
+        type: string
+        description: The organization slug that owns the issue.
+      assignTo:
+        type: string
+        description: Username or team slug to assign the escalated issue to.
+      query:
+        type: string
+        description: Sentry query used to find issues to escalate.
+        default: "is:unresolved level:error"
+      priority:
+        type: string
+        description: Priority to set on escalation.
+        default: "critical"
+  steps:
+  - stepId: findIssue
+    description: >-
+      List unresolved issues matching the severity query, sorted by frequency,
+      returning the single top candidate to escalate.
+    operationId: listOrganizationIssues
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: query
+      in: query
+      value: $inputs.query
+    - name: sort
+      in: query
+      value: freq
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      issueId: $response.body#/0/id
+      issueShortId: $response.body#/0/shortId
+      issueTitle: $response.body#/0/title
+    onSuccess:
+    - name: issueFound
+      type: goto
+      stepId: reviewEvents
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: noIssue
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: reviewEvents
+    description: >-
+      Pull the issue's most recent events with full data to give the assignee
+      context at escalation time.
+    operationId: listIssueEvents
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findIssue.outputs.issueId
+    - name: full
+      in: query
+      value: true
+    - name: limit
+      in: query
+      value: 5
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      latestEventId: $response.body#/0/eventId
+      latestEventMessage: $response.body#/0/message
+  - stepId: escalateIssue
+    description: >-
+      Escalate the issue by setting a critical priority, assigning an owner, and
+      marking it seen and subscribed.
+    operationId: updateIssue
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findIssue.outputs.issueId
+    requestBody:
+      contentType: application/json
+      payload:
+        priority: $inputs.priority
+        assignedTo: $inputs.assignTo
+        hasSeen: true
+        isSubscribed: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      updatedStatus: $response.body#/status
+  outputs:
+    issueId: $steps.findIssue.outputs.issueId
+    issueShortId: $steps.findIssue.outputs.issueShortId
+    latestEventId: $steps.reviewEvents.outputs.latestEventId
+    updatedStatus: $steps.escalateIssue.outputs.updatedStatus

@@ -1,0 +1,131 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Resolve Issues in the Next Release
+  summary: Create a release, then mark the noisiest unresolved issues as resolved in that next release.
+  description: >-
+    A deployment-driven cleanup pattern. The workflow records a new release for
+    deployment tracking, lists the organization's most frequent unresolved
+    issues, branches on whether any exist, and then flags the top issue as
+    resolved in the next release so it reopens only if the error recurs after the
+    deploy. Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: resolve-issues-in-release
+  summary: Cut a release and resolve the top unresolved issue in that next release.
+  description: >-
+    Creates a release tied to one or more project slugs, finds the highest
+    frequency unresolved issue, and updates it to resolvedInNextRelease so the
+    fix is associated with the deploy. Ends early when there is nothing to
+    resolve.
+  inputs:
+    type: object
+    required:
+    - organizationSlug
+    - version
+    - projects
+    properties:
+      organizationSlug:
+        type: string
+        description: The organization slug that owns the release and issues.
+      version:
+        type: string
+        description: The release version string (e.g. a git SHA or semver tag).
+      ref:
+        type: string
+        description: Optional git ref (branch or tag) for the release.
+      projects:
+        type: array
+        items:
+          type: string
+        description: List of project slugs the release applies to.
+      query:
+        type: string
+        description: Sentry query used to find issues to resolve.
+        default: "is:unresolved"
+  steps:
+  - stepId: createRelease
+    description: >-
+      Create the release record for deployment and source-map tracking, scoped
+      to the supplied project slugs.
+    operationId: createRelease
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    requestBody:
+      contentType: application/json
+      payload:
+        version: $inputs.version
+        ref: $inputs.ref
+        projects: $inputs.projects
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      releaseVersion: $response.body#/version
+      releaseId: $response.body#/id
+  - stepId: findUnresolvedIssue
+    description: >-
+      List the organization's unresolved issues by frequency to find the top
+      candidate to resolve in the new release.
+    operationId: listOrganizationIssues
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: query
+      in: query
+      value: $inputs.query
+    - name: sort
+      in: query
+      value: freq
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      issueId: $response.body#/0/id
+      issueShortId: $response.body#/0/shortId
+    onSuccess:
+    - name: hasIssue
+      type: goto
+      stepId: resolveInNextRelease
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: noIssue
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: resolveInNextRelease
+    description: >-
+      Mark the selected issue as resolved in the next release so it stays
+      resolved unless the error recurs after this deploy.
+    operationId: updateIssue
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: issue_id
+      in: path
+      value: $steps.findUnresolvedIssue.outputs.issueId
+    requestBody:
+      contentType: application/json
+      payload:
+        status: resolvedInNextRelease
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      resolvedStatus: $response.body#/status
+  outputs:
+    releaseVersion: $steps.createRelease.outputs.releaseVersion
+    resolvedIssueId: $steps.findUnresolvedIssue.outputs.issueId
+    resolvedStatus: $steps.resolveInNextRelease.outputs.resolvedStatus

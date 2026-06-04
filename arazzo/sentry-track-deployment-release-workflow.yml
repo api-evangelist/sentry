@@ -1,0 +1,125 @@
+arazzo: 1.0.1
+info:
+  title: Sentry Track a Deployment Release
+  summary: Idempotently record a release for a project, creating it only when it does not already exist.
+  description: >-
+    A deploy-tracking pattern that avoids duplicate releases. The workflow lists
+    existing releases filtered by the target version, branches on whether a
+    matching release already exists, creates the release when it is missing, and
+    re-lists releases to confirm the version is now tracked. Every step spells
+    out its request inline so the flow can be read and executed without opening
+    the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: sentryApi
+  url: ../openapi/sentry-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: track-deployment-release
+  summary: Ensure a release version exists for an organization, creating it if absent.
+  description: >-
+    Searches existing releases by version, and when none match, creates a new
+    release tied to the supplied project slugs, then confirms the release is now
+    listed. Ends early when a matching release already exists.
+  inputs:
+    type: object
+    required:
+    - organizationSlug
+    - version
+    - projects
+    properties:
+      organizationSlug:
+        type: string
+        description: The organization slug that owns the release.
+      version:
+        type: string
+        description: The release version string to track.
+      ref:
+        type: string
+        description: Optional git ref (branch or tag) for the release.
+      url:
+        type: string
+        description: Optional URL pointing at the release in source control.
+      projects:
+        type: array
+        items:
+          type: string
+        description: List of project slugs the release applies to.
+  steps:
+  - stepId: findExistingRelease
+    description: >-
+      List releases filtered by the target version to detect whether the
+      release has already been recorded.
+    operationId: listReleases
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: query
+      in: query
+      value: $inputs.version
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      existingVersion: $response.body#/0/version
+    onSuccess:
+    - name: alreadyExists
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.length > 0
+        type: jsonpath
+    - name: missing
+      type: goto
+      stepId: createRelease
+      criteria:
+      - context: $response.body
+        condition: $.length == 0
+        type: jsonpath
+  - stepId: createRelease
+    description: >-
+      Create the release record for the supplied version and project slugs so
+      the deployment can be tracked.
+    operationId: createRelease
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    requestBody:
+      contentType: application/json
+      payload:
+        version: $inputs.version
+        ref: $inputs.ref
+        url: $inputs.url
+        projects: $inputs.projects
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      releaseVersion: $response.body#/version
+      releaseId: $response.body#/id
+  - stepId: confirmRelease
+    description: >-
+      Re-list releases filtered by version to confirm the newly created release
+      is now tracked by the organization.
+    operationId: listReleases
+    parameters:
+    - name: organization_slug
+      in: path
+      value: $inputs.organizationSlug
+    - name: query
+      in: query
+      value: $steps.createRelease.outputs.releaseVersion
+    - name: limit
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      confirmedVersion: $response.body#/0/version
+  outputs:
+    releaseId: $steps.createRelease.outputs.releaseId
+    releaseVersion: $steps.createRelease.outputs.releaseVersion
+    confirmedVersion: $steps.confirmRelease.outputs.confirmedVersion
