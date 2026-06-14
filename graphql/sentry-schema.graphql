@@ -1,0 +1,824 @@
+"""
+Sentry GraphQL Schema — Conceptual Data Model
+Derived from the Sentry REST API (v0), JSON Schema artifacts, and public documentation.
+Sentry does not expose a public GraphQL endpoint; this SDL represents the core domain
+model as a GraphQL type system for tooling, federation, and documentation purposes.
+
+Source: https://docs.sentry.io/api/
+Reference: https://github.com/getsentry/sentry
+"""
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# ---------------------------------------------------------------------------
+# Root Query
+# ---------------------------------------------------------------------------
+
+type Query {
+  """List organizations accessible to the authenticated user."""
+  organizations(member: Boolean, owner: Boolean): [Organization!]!
+
+  """Retrieve a single organization by slug."""
+  organization(slug: String!): Organization
+
+  """
+  List issues for an organization with optional filtering.
+  Supports Sentry query syntax (e.g. "is:unresolved assigned:me").
+  """
+  issues(
+    organizationSlug: String!
+    project: [Int!]
+    query: String
+    statsPeriod: String
+    start: DateTime
+    end: DateTime
+    limit: Int
+    cursor: String
+    sort: IssueSortOrder
+  ): IssueConnection!
+
+  """Retrieve a single issue by ID."""
+  issue(organizationSlug: String!, issueId: String!): Issue
+
+  """List events for an issue."""
+  issueEvents(
+    organizationSlug: String!
+    issueId: String!
+    full: Boolean
+    limit: Int
+  ): [Event!]!
+
+  """List projects within an organization."""
+  projects(
+    organizationSlug: String!
+    query: String
+    limit: Int
+  ): [Project!]!
+
+  """Retrieve a single project."""
+  project(organizationSlug: String!, projectSlug: String!): Project
+
+  """List releases for an organization."""
+  releases(
+    organizationSlug: String!
+    query: String
+    project: Int
+    limit: Int
+  ): [Release!]!
+
+  """List alert rules for an organization."""
+  alertRules(
+    organizationSlug: String!
+    project: Int
+  ): [AlertRule!]!
+
+  """List teams within an organization."""
+  teams(organizationSlug: String!): [Team!]!
+
+  """Retrieve a single team."""
+  team(organizationSlug: String!, teamSlug: String!): Team
+
+  """List members of an organization."""
+  members(organizationSlug: String!): [Member!]!
+
+  """List integrations configured for an organization."""
+  integrations(organizationSlug: String!): [Integration!]!
+
+  """List deploys for a release."""
+  deploys(organizationSlug: String!, releaseVersion: String!): [Deploy!]!
+
+  """List cron monitors for an organization."""
+  monitors(organizationSlug: String!): [Monitor!]!
+}
+
+# ---------------------------------------------------------------------------
+# Root Mutation
+# ---------------------------------------------------------------------------
+
+type Mutation {
+  """Update an issue's status, assignee, or priority."""
+  updateIssue(
+    organizationSlug: String!
+    issueId: String!
+    input: IssueUpdateInput!
+  ): Issue
+
+  """Delete an issue permanently."""
+  deleteIssue(organizationSlug: String!, issueId: String!): Boolean
+
+  """Create a new release."""
+  createRelease(
+    organizationSlug: String!
+    input: ReleaseCreateInput!
+  ): Release
+
+  """Create a deploy for a release."""
+  createDeploy(
+    organizationSlug: String!
+    releaseVersion: String!
+    input: DeployCreateInput!
+  ): Deploy
+}
+
+# ---------------------------------------------------------------------------
+# Core Types
+# ---------------------------------------------------------------------------
+
+"""
+An organization is the top-level container for all Sentry resources.
+All API operations are scoped to an organization via its slug.
+"""
+type Organization {
+  id: ID!
+  slug: String!
+  name: String!
+  dateCreated: DateTime!
+  status: OrganizationStatus!
+  features: [String!]!
+  avatar: Avatar
+  isEarlyAdopter: Boolean!
+  requiresSso: Boolean!
+  plan: String
+  planDetails: OrganizationPlanDetails
+
+  """Projects belonging to this organization."""
+  projects: [Project!]!
+
+  """Teams within this organization."""
+  teams: [Team!]!
+
+  """Organization members."""
+  members: [Member!]!
+
+  """Alert rules configured for this organization."""
+  alertRules: [AlertRule!]!
+
+  """Releases associated with this organization."""
+  releases: [Release!]!
+
+  """Third-party integrations."""
+  integrations: [Integration!]!
+}
+
+type OrganizationStatus {
+  id: String!
+  name: String!
+}
+
+type OrganizationPlanDetails {
+  name: String
+  maxMembers: Int
+  maxProjects: Int
+}
+
+"""
+A project is a logical container for a specific application or service.
+Issues, releases, and DSNs belong to projects.
+"""
+type Project {
+  id: ID!
+  slug: String!
+  name: String!
+  platform: String
+  dateCreated: DateTime!
+  isBookmarked: Boolean!
+  isMember: Boolean!
+  features: [String!]!
+  firstEvent: DateTime
+  latestRelease: Release
+  organization: OrganizationRef!
+  teams: [Team!]!
+  dsn: String
+  color: String
+  hasAccess: Boolean
+  avatar: Avatar
+}
+
+"""
+A team is a group of organization members responsible for one or more projects.
+Issues and alert rules can be assigned to teams.
+"""
+type Team {
+  id: ID!
+  slug: String!
+  name: String!
+  dateCreated: DateTime!
+  isMember: Boolean!
+  memberCount: Int!
+  projects: [Project!]!
+  members: [Member!]!
+  avatar: Avatar
+}
+
+"""
+A member represents a user's membership within an organization.
+"""
+type Member {
+  id: ID!
+  email: String!
+  name: String!
+  role: OrganizationRole!
+  roleName: String!
+  pending: Boolean!
+  expired: Boolean!
+  user: User
+  dateCreated: DateTime!
+  inviteStatus: String
+}
+
+"""
+A Sentry user account.
+"""
+type User {
+  id: ID!
+  name: String!
+  username: String!
+  email: String!
+  avatarUrl: String
+  isActive: Boolean!
+  hasPasswordAuth: Boolean!
+  isManaged: Boolean!
+  dateJoined: DateTime!
+  lastLogin: DateTime
+  isSuperuser: Boolean!
+}
+
+"""
+An issue is an aggregation of similar error events grouped by fingerprint.
+Issues have a status lifecycle: unresolved -> resolved -> regressed.
+"""
+type Issue {
+  id: ID!
+  """Human-readable ID in ORG-XXX format."""
+  shortId: String!
+  title: String!
+  culprit: String
+  permalink: String
+  logger: String
+  level: SeverityLevel!
+  status: IssueStatus!
+  isPublic: Boolean!
+  platform: String
+  project: ProjectRef!
+  type: IssueType!
+  metadata: IssueMetadata
+  numComments: Int!
+  userCount: Int!
+  """Total event count (string to support large integers)."""
+  count: String!
+  firstSeen: DateTime!
+  lastSeen: DateTime!
+  assignedTo: Actor
+  tags: [IssueTagStat!]!
+  stats: IssueStats
+  priority: Priority
+  isSubscribed: Boolean!
+  isBookmarked: Boolean!
+  hasSeen: Boolean!
+  shareId: String
+  """Individual events for this issue."""
+  events(full: Boolean, limit: Int): [Event!]!
+}
+
+"""
+A single error event captured by a Sentry SDK.
+Contains the full stack trace, breadcrumbs, user context, and tags.
+"""
+type Event {
+  id: ID!
+  eventId: String!
+  """Parent issue ID."""
+  groupId: String!
+  dateCreated: DateTime!
+  dateReceived: DateTime!
+  type: String!
+  platform: String
+  message: String
+  title: String!
+  location: String
+  culprit: String
+  level: SeverityLevel!
+  tags: [EventTag!]!
+  user: EventUser
+  sdk: SdkInfo
+  contexts: EventContexts
+  entries: [EventEntry!]!
+  errors: [EventError!]!
+  fingerprints: [String!]!
+  release: ReleaseRef
+  environment: String
+  dist: String
+}
+
+"""
+A release represents a named version of an application deployed to environments.
+Releases link commits to issues to identify which deploy caused a regression.
+"""
+type Release {
+  id: ID!
+  version: String!
+  shortVersion: String
+  dateCreated: DateTime!
+  dateReleased: DateTime
+  firstEvent: DateTime
+  lastEvent: DateTime
+  newGroups: Int!
+  commitCount: Int!
+  deployCount: Int!
+  authors: [ReleaseAuthor!]!
+  projects: [ProjectRef!]!
+  ref: String
+  url: String
+  data: ReleaseData
+  deploys: [Deploy!]!
+}
+
+"""
+A deploy records a release being pushed to a specific environment.
+"""
+type Deploy {
+  id: ID!
+  environment: String!
+  dateStarted: DateTime
+  dateFinished: DateTime
+  name: String
+  url: String
+  release: ReleaseRef!
+}
+
+"""
+An alert rule defines a condition that triggers notifications when thresholds
+are crossed for error rates, metrics, or issue counts.
+"""
+type AlertRule {
+  id: ID!
+  name: String!
+  environment: String
+  dataset: AlertDataset!
+  query: String!
+  aggregate: String!
+  """Time window in minutes."""
+  timeWindow: Int!
+  thresholdType: Int!
+  resolveThreshold: Float
+  triggers: [AlertTrigger!]!
+  projects: [String!]!
+  owner: String
+  dateCreated: DateTime!
+  dateModified: DateTime
+  status: AlertRuleStatus
+}
+
+"""
+A trigger defines the threshold condition within an alert rule.
+Multiple triggers can define warning and critical states.
+"""
+type AlertTrigger {
+  id: ID!
+  label: String!
+  alertThreshold: Float!
+  resolveThreshold: Float
+  thresholdType: Int!
+  actions: [AlertAction!]!
+}
+
+"""
+An alert action specifies how to notify when a trigger fires.
+"""
+type AlertAction {
+  id: ID!
+  type: String!
+  targetType: String
+  targetIdentifier: String
+  inputChannelId: String
+  integrationId: String
+  sentryAppId: String
+}
+
+"""
+A third-party integration connecting Sentry to external services
+such as Slack, GitHub, Jira, or PagerDuty.
+"""
+type Integration {
+  id: ID!
+  name: String!
+  slug: String!
+  status: IntegrationStatus!
+  provider: IntegrationProvider!
+  domainName: String
+  accountType: String
+  icon: String
+  gracePeriodEnd: DateTime
+  dateCreated: DateTime!
+}
+
+type IntegrationProvider {
+  key: String!
+  slug: String!
+  name: String!
+  canAdd: Boolean!
+  canDisable: Boolean!
+  features: [String!]!
+}
+
+"""
+A cron monitor verifies that scheduled jobs check in on time.
+Missed or late check-ins trigger alerts.
+"""
+type Monitor {
+  id: ID!
+  slug: String!
+  name: String!
+  status: MonitorStatus!
+  type: MonitorType!
+  config: MonitorConfig!
+  project: ProjectRef!
+  dateCreated: DateTime!
+  nextCheckIn: DateTime
+  lastCheckIn: DateTime
+  environments: [MonitorEnvironment!]!
+}
+
+type MonitorConfig {
+  schedule: String!
+  scheduleType: String!
+  checkinMargin: Int
+  maxRuntime: Int
+  timezone: String
+}
+
+type MonitorEnvironment {
+  name: String!
+  status: MonitorStatus!
+  lastCheckIn: DateTime
+  nextCheckIn: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Supporting / Reference Types
+# ---------------------------------------------------------------------------
+
+type OrganizationRef {
+  id: ID!
+  slug: String!
+  name: String!
+}
+
+type ProjectRef {
+  id: ID!
+  name: String!
+  slug: String!
+  platform: String
+}
+
+type ReleaseRef {
+  version: String!
+  shortVersion: String
+  dateCreated: DateTime
+}
+
+"""
+An actor that can be assigned to an issue — either a User or a Team.
+"""
+union Actor = User | Team
+
+type Avatar {
+  avatarType: String
+  avatarUuid: String
+  avatarUrl: String
+}
+
+type IssueMetadata {
+  type: String
+  value: String
+  filename: String
+  function: String
+  display_title_with_tree_label: Boolean
+}
+
+type IssueTagStat {
+  key: String!
+  name: String!
+  totalValues: Int!
+}
+
+type IssueStats {
+  """Event counts over the last 24 hours as [timestamp, count] pairs."""
+  twentyFourHour: [[Int!]!]
+  """Event counts over the last 14 days as [timestamp, count] pairs."""
+  fourteenDay: [[Int!]!]
+  """Event counts over the last 30 days as [timestamp, count] pairs."""
+  thirtyDay: [[Int!]!]
+}
+
+type EventTag {
+  key: String!
+  value: String!
+}
+
+type EventUser {
+  id: String
+  email: String
+  username: String
+  ipAddress: String
+  name: String
+}
+
+type SdkInfo {
+  name: String!
+  version: String!
+  integrations: [String!]
+  packages: [SdkPackage!]
+}
+
+type SdkPackage {
+  name: String!
+  version: String!
+}
+
+type EventContexts {
+  os: OsContext
+  runtime: RuntimeContext
+  browser: BrowserContext
+  device: DeviceContext
+  app: AppContext
+  gpu: GpuContext
+  trace: TraceContext
+}
+
+type OsContext {
+  name: String
+  version: String
+  build: String
+  kernelVersion: String
+}
+
+type RuntimeContext {
+  name: String
+  version: String
+  build: String
+}
+
+type BrowserContext {
+  name: String
+  version: String
+}
+
+type DeviceContext {
+  name: String
+  family: String
+  model: String
+  modelId: String
+  arch: String
+  batteryLevel: Float
+  orientation: String
+  manufacturer: String
+  brand: String
+  screenDpi: Int
+  screenHeightPixels: Int
+  screenWidthPixels: Int
+}
+
+type AppContext {
+  appStartTime: String
+  deviceAppHash: String
+  buildType: String
+  appIdentifier: String
+  appName: String
+  appVersion: String
+  appBuild: String
+}
+
+type GpuContext {
+  name: String
+  id: Int
+  vendorId: String
+  vendorName: String
+  memorySize: Int
+  apiType: String
+  multiThreadedRendering: Boolean
+  version: String
+  npotSupport: String
+}
+
+type TraceContext {
+  traceId: String!
+  spanId: String!
+  parentSpanId: String
+  op: String
+  status: String
+  sampled: Boolean
+}
+
+type EventEntry {
+  type: EventEntryType!
+  data: String!
+}
+
+type EventError {
+  type: String!
+  message: String
+  data: String
+}
+
+type ReleaseAuthor {
+  name: String
+  email: String
+}
+
+type ReleaseData {
+  releaseCommits: [Commit!]
+}
+
+type Commit {
+  id: String!
+  message: String
+  dateCreated: DateTime!
+  repository: CommitRepository
+  author: CommitAuthor
+}
+
+type CommitRepository {
+  id: String!
+  name: String!
+  url: String
+}
+
+type CommitAuthor {
+  name: String
+  email: String
+}
+
+type IssueConnection {
+  nodes: [Issue!]!
+  """Pagination cursor for the next page."""
+  nextCursor: String
+  """Pagination cursor for the previous page."""
+  previousCursor: String
+  """Whether more results exist."""
+  hasMore: Boolean!
+}
+
+# ---------------------------------------------------------------------------
+# Input Types
+# ---------------------------------------------------------------------------
+
+input IssueUpdateInput {
+  status: IssueStatus
+  """Username or team slug for assignment."""
+  assignedTo: String
+  hasSeen: Boolean
+  isBookmarked: Boolean
+  isSubscribed: Boolean
+  priority: Priority
+}
+
+input ReleaseCreateInput {
+  """Release version string."""
+  version: String!
+  """Optional git ref (branch or tag)."""
+  ref: String
+  url: String
+  """List of project slugs to associate with the release."""
+  projects: [String!]!
+  dateReleased: DateTime
+  commits: [CommitInput!]
+}
+
+input CommitInput {
+  id: String!
+  repository: String
+  message: String
+  patchSet: [PatchInput!]
+  author: CommitAuthorInput
+  timestamp: DateTime
+}
+
+input PatchInput {
+  path: String!
+  type: String!
+}
+
+input CommitAuthorInput {
+  name: String
+  email: String
+}
+
+input DeployCreateInput {
+  environment: String!
+  name: String
+  url: String
+  dateStarted: DateTime
+  dateFinished: DateTime
+}
+
+# ---------------------------------------------------------------------------
+# Enums
+# ---------------------------------------------------------------------------
+
+enum SeverityLevel {
+  FATAL
+  ERROR
+  WARNING
+  INFO
+  DEBUG
+}
+
+enum IssueStatus {
+  RESOLVED
+  UNRESOLVED
+  IGNORED
+  RESOLVED_IN_NEXT_RELEASE
+}
+
+enum IssueType {
+  ERROR
+  CSP
+  HPKP
+  EXPECTCT
+  EXPECTSTAPLE
+  PERFORMANCE
+  DEFAULT
+}
+
+enum Priority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum IssueSortOrder {
+  DATE
+  NEW
+  PRIORITY
+  FREQ
+  USER
+}
+
+enum OrganizationRole {
+  OWNER
+  MANAGER
+  ADMIN
+  MEMBER
+  BILLING
+}
+
+enum AlertDataset {
+  EVENTS
+  TRANSACTIONS
+  SESSIONS
+  METRICS
+}
+
+enum AlertRuleStatus {
+  PENDING
+  TRIGGERED
+  RESOLVED
+}
+
+enum IntegrationStatus {
+  ACTIVE
+  DISABLED
+  PENDING_DELETION
+}
+
+enum MonitorStatus {
+  ACTIVE
+  DISABLED
+  PENDING_DELETION
+  WAITING_FOR_FIRST_CHECKIN
+  OK
+  ERROR
+  MISSED_CHECKIN
+  TIMED_OUT
+}
+
+enum MonitorType {
+  CRON_JOB
+}
+
+enum EventEntryType {
+  EXCEPTION
+  STACKTRACE
+  BREADCRUMBS
+  REQUEST
+  MESSAGE
+  TEMPLATE
+  THREADS
+  DEBUG_META
+  SPANS
+}
+
+# ---------------------------------------------------------------------------
+# Scalars
+# ---------------------------------------------------------------------------
+
+"""ISO-8601 date-time string."""
+scalar DateTime
+
+"""Arbitrary JSON value."""
+scalar JSON

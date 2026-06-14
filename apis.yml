@@ -1,8 +1,10 @@
 aid: sentry
 name: Sentry
-description: Sentry is a developer-first application monitoring platform that helps software teams discover, triage, and prioritize
-  errors and performance issues in production. Sentry provides real-time error monitoring, performance tracing, session replay,
-  profiling, and release tracking for web, mobile, and backend applications across 22+ platforms and languages.
+description: Sentry is a developer-first application monitoring platform that helps
+  software teams discover, triage, and prioritize errors and performance issues in
+  production. Sentry provides real-time error monitoring, performance tracing, session
+  replay, profiling, and release tracking for web, mobile, and backend applications
+  across 22+ platforms and languages.
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
@@ -18,9 +20,10 @@ specificationVersion: '0.19'
 apis:
 - aid: sentry:sentry-error-monitoring-api
   name: Sentry Error Monitoring API
-  description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable
-    issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are
-    scoped to an organization. Current API version is v0.
+  description: Sentry provides error monitoring and performance tracking REST APIs
+    for software applications. APIs enable issue management, event retrieval, release
+    tracking, alert configuration, and project administration. All endpoints are scoped
+    to an organization. Current API version is v0.
   humanURL: https://docs.sentry.io/api/
   baseURL: https://sentry.io/api/0
   tags:
@@ -41,26 +44,17 @@ apis:
     url: https://docs.sentry.io/api/guides/create-auth-token/
   - type: OpenAPI
     url: openapi/sentry-api-openapi.yml
-  - type: NaftikoCapability
-    url: capabilities/sentry-alerts.yaml
-  - type: NaftikoCapability
-    url: capabilities/sentry-events.yaml
-  - type: NaftikoCapability
-    url: capabilities/sentry-issues.yaml
-  - type: NaftikoCapability
-    url: capabilities/sentry-organizations.yaml
-  - type: NaftikoCapability
-    url: capabilities/sentry-projects.yaml
-  - type: NaftikoCapability
-    url: capabilities/sentry-releases.yaml
+  - url: graphql/sentry-graphql.md
+    type: GraphQL
   contact:
   - FN: Sentry Support
     url: https://sentry.io/support/
     email: support@sentry.io
 - aid: sentry:sentry-sdk-api
   name: Sentry SDK API
-  description: Sentry provides official SDKs for 22+ platforms including JavaScript, Python, PHP, .NET, Java, Go, Ruby, Rust,
-    Android, Apple, React Native, Unity, and Unreal Engine. Each SDK provides error capture, performance monitoring, session
+  description: Sentry provides official SDKs for 22+ platforms including JavaScript,
+    Python, PHP, .NET, Java, Go, Ruby, Rust, Android, Apple, React Native, Unity,
+    and Unreal Engine. Each SDK provides error capture, performance monitoring, session
     replay, and profiling capabilities.
   humanURL: https://docs.sentry.io/platforms/
   tags:
@@ -76,9 +70,10 @@ apis:
     url: https://develop.sentry.dev/sdk/overview/
 - aid: sentry:sentry-integration-platform-api
   name: Sentry Integration Platform API
-  description: The Sentry Integration Platform API enables building public and internal integrations with Sentry. Supports
-    OAuth2 with PKCE, device authorization flow for CLI/CI environments, webhook notifications, and custom alert actions for
-    third-party applications.
+  description: The Sentry Integration Platform API enables building public and internal
+    integrations with Sentry. Supports OAuth2 with PKCE, device authorization flow
+    for CLI/CI environments, webhook notifications, and custom alert actions for third-party
+    applications.
   humanURL: https://docs.sentry.io/api/integration/
   tags:
   - Error Monitoring
@@ -93,27 +88,35 @@ apis:
   - type: AsyncAPI
     url: asyncapi/sentry-webhooks-asyncapi.yml
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/sentry/overview
 - type: ArazzoWorkflows
   url: arazzo/
   workflows:
   - url: arazzo/sentry-escalate-issue-workflow.yml
     name: Sentry Escalate and Assign an Issue
-    summary: Find a high-severity unresolved issue, review its events, then escalate priority and assign an owner.
+    summary: Find a high-severity unresolved issue, review its events, then escalate
+      priority and assign an owner.
   - url: arazzo/sentry-investigate-project-issues-workflow.yml
     name: Sentry Investigate a Project's Issues
-    summary: Confirm a project, list its issues, then drill into the top issue's detail and events.
+    summary: Confirm a project, list its issues, then drill into the top issue's detail
+      and events.
   - url: arazzo/sentry-organization-survey-workflow.yml
     name: Sentry Organization Monitoring Survey
-    summary: Resolve an organization, then inventory its projects, releases, and alert rules.
+    summary: Resolve an organization, then inventory its projects, releases, and alert
+      rules.
   - url: arazzo/sentry-resolve-issues-in-release-workflow.yml
     name: Sentry Resolve Issues in the Next Release
-    summary: Create a release, then mark the noisiest unresolved issues as resolved in that next release.
+    summary: Create a release, then mark the noisiest unresolved issues as resolved
+      in that next release.
   - url: arazzo/sentry-track-deployment-release-workflow.yml
     name: Sentry Track a Deployment Release
-    summary: Idempotently record a release for a project, creating it only when it does not already exist.
+    summary: Idempotently record a release for a project, creating it only when it
+      does not already exist.
   - url: arazzo/sentry-triage-issue-workflow.yml
     name: Sentry Triage and Resolve an Issue
-    summary: Find the most relevant unresolved issue, inspect its events, then resolve or reprioritize it.
+    summary: Find the most relevant unresolved issue, inspect its events, then resolve
+      or reprioritize it.
 - type: LinkedIn
   url: https://www.linkedin.com/company/getsentry
 - type: Website
