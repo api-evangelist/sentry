@@ -1,0 +1,2264 @@
+{
+  "item": [
+    {
+      "id": "3ec9f199-31d9-477d-b89d-fb1b030c8ceb",
+      "name": "Alerts",
+      "description": {
+        "content": "Alert rules and notifications",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5526a2b0-f03b-4818-b613-ff88d04f5c83",
+          "name": "List alert rules",
+          "request": {
+            "name": "List alert rules",
+            "description": {
+              "content": "Returns all metric and issue alert rules for an organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "alert-rules",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a2fc6bb5-be66-4a1a-815a-bf9070124a8f",
+              "name": "List of alert rules",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "alert-rules",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"environment\": \"string\",\n    \"dataset\": \"sessions\",\n    \"query\": \"string\",\n    \"aggregate\": \"string\",\n    \"timeWindow\": 6633,\n    \"thresholdType\": 3372,\n    \"resolveThreshold\": 8159.949802372102,\n    \"projects\": [\n      \"string\",\n      \"string\"\n    ],\n    \"owner\": \"string\",\n    \"dateCreated\": \"2023-12-17T12:23:18.092Z\"\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"environment\": \"string\",\n    \"dataset\": \"events\",\n    \"query\": \"string\",\n    \"aggregate\": \"string\",\n    \"timeWindow\": 2826,\n    \"thresholdType\": 2054,\n    \"resolveThreshold\": 6857.162647458113,\n    \"projects\": [\n      \"string\",\n      \"string\"\n    ],\n    \"owner\": \"string\",\n    \"dateCreated\": \"1959-04-07T09:42:35.449Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "00212c66-cede-4c0e-b4e9-477d00701306",
+      "name": "Events",
+      "description": {
+        "content": "Raw error events",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8c80b26b-67a0-4de4-8f52-d632c377e9d9",
+          "name": "List an issue's events",
+          "request": {
+            "name": "List an issue's events",
+            "description": {
+              "content": "Returns a list of error events bound to an issue.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                "events",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "full",
+                  "value": "false",
+                  "description": "Return full event data including stack traces"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "038ca7f3-0164-405c-8db6-2b215ce49b36",
+              "name": "List of events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "full",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"2006-06-12T22:18:47.449Z\",\n    \"dateReceived\": \"1995-08-08T05:46:23.386Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"debug\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"message\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"exception\",\n        \"data\": {}\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"1948-03-19T22:13:56.820Z\",\n    \"dateReceived\": \"2007-08-23T00:17:37.395Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"error\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"breadcrumbs\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"message\",\n        \"data\": {}\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "23c8782d-b447-4630-b4c2-a03d8979199d",
+      "name": "Issues",
+      "description": {
+        "content": "Error issues and aggregated events",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "27f315a9-b35d-44b0-9ec7-34f0bfc2333e",
+          "name": "List issues for an organization",
+          "request": {
+            "name": "List issues for an organization",
+            "description": {
+              "content": "Returns a list of issues (error aggregations) for the organization. Supports filtering by project, query, date range, status, and assignee. Replaces the deprecated project-scoped issues endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>",
+                  "description": "Filter by project ID(s)"
+                },
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>",
+                  "description": "Filter by project ID(s)"
+                },
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Sentry query string (e.g., \"is:unresolved assigned:me\")"
+                },
+                {
+                  "disabled": false,
+                  "key": "statsPeriod",
+                  "value": "<string>",
+                  "description": "Time range (e.g., 14d, 24h, 1h)"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Pagination cursor from previous response"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "21308e24-4849-4430-9959-cbda8ee0777e",
+              "name": "List of issues",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "is:unresolved"
+                    },
+                    {
+                      "key": "statsPeriod",
+                      "value": "14d"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Pagination links (rel=next, rel=previous)",
+                  "key": "Link",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"shortId\": \"MYORG-42\",\n    \"title\": \"string\",\n    \"culprit\": \"string\",\n    \"permalink\": \"https://ufePW.niapyeR0LnP\",\n    \"logger\": \"string\",\n    \"level\": \"debug\",\n    \"status\": \"resolved\",\n    \"isPublic\": false,\n    \"platform\": \"string\",\n    \"project\": {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    },\n    \"type\": \"expectstaple\",\n    \"metadata\": {},\n    \"numComments\": 3867,\n    \"userCount\": 4472,\n    \"count\": \"string\",\n    \"firstSeen\": \"2003-09-30T02:02:26.712Z\",\n    \"lastSeen\": \"1960-09-14T08:46:12.082Z\",\n    \"assignedTo\": {},\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"name\": \"string\",\n        \"totalValues\": 1490\n      },\n      {\n        \"key\": \"string\",\n        \"name\": \"string\",\n        \"totalValues\": 3925\n      }\n    ],\n    \"stats\": {}\n  },\n  {\n    \"id\": \"string\",\n    \"shortId\": \"MYORG-42\",\n    \"title\": \"string\",\n    \"culprit\": \"string\",\n    \"permalink\": \"http://eUsbHSnKjbRoaDtBoQEfRgRDIvfjZTrMA.ljnP16JwqnEy3SCnfQ5HaUdS4UFoMfCpwVfiY1z8fhCvAecSBVRZLLqFqY-6sYcEY\",\n    \"logger\": \"string\",\n    \"level\": \"debug\",\n    \"status\": \"unresolved\",\n    \"isPublic\": false,\n    \"platform\": \"string\",\n    \"project\": {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    },\n    \"type\": \"default\",\n    \"metadata\": {},\n    \"numComments\": 2389,\n    \"userCount\": 8226,\n    \"count\": \"string\",\n    \"firstSeen\": \"2017-11-30T01:29:55.806Z\",\n    \"lastSeen\": \"1981-04-17T09:11:58.168Z\",\n    \"assignedTo\": {},\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"name\": \"string\",\n        \"totalValues\": 1392\n      },\n      {\n        \"key\": \"string\",\n        \"name\": \"string\",\n        \"totalValues\": 8432\n      }\n    ],\n    \"stats\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ae0fc4f0-4fd0-40a2-b2de-3e26393c47ce",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "query",
+                      "value": "is:unresolved"
+                    },
+                    {
+                      "key": "statsPeriod",
+                      "value": "14d"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "072a4a25-4098-49d8-9629-dcfc2824767a",
+          "name": "Retrieve an issue",
+          "request": {
+            "name": "Retrieve an issue",
+            "description": {
+              "content": "Returns detailed stats and metadata for a specific issue.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) Issue ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ea5a75f6-df31-4586-a9ce-76d951ba1e79",
+              "name": "Issue details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) Issue ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"shortId\": \"MYORG-42\",\n  \"title\": \"string\",\n  \"culprit\": \"string\",\n  \"permalink\": \"https://rgSoZaOSrasHUlPYrolNm.krnstHD3eXvw3A\",\n  \"logger\": \"string\",\n  \"level\": \"warning\",\n  \"status\": \"unresolved\",\n  \"isPublic\": true,\n  \"platform\": \"string\",\n  \"project\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"slug\": \"string\"\n  },\n  \"type\": \"error\",\n  \"metadata\": {},\n  \"numComments\": 7621,\n  \"userCount\": 4742,\n  \"count\": \"string\",\n  \"firstSeen\": \"2019-12-29T09:43:05.889Z\",\n  \"lastSeen\": \"1979-04-08T20:28:04.890Z\",\n  \"assignedTo\": {},\n  \"tags\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"totalValues\": 2018\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"totalValues\": 9789\n    }\n  ],\n  \"stats\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8003764-99df-4257-8b17-510aff92c67f",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) Issue ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8115809a-5bc2-4118-8bf9-7e5a431b1d3e",
+          "name": "Update an issue",
+          "request": {
+            "name": "Update an issue",
+            "description": {
+              "content": "Updates attributes of an issue such as status, assignee, or priority.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a180ef7f-06de-4a81-a74e-fd08a1b16d38",
+              "name": "Issue updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"shortId\": \"MYORG-42\",\n  \"title\": \"string\",\n  \"culprit\": \"string\",\n  \"permalink\": \"https://rgSoZaOSrasHUlPYrolNm.krnstHD3eXvw3A\",\n  \"logger\": \"string\",\n  \"level\": \"warning\",\n  \"status\": \"unresolved\",\n  \"isPublic\": true,\n  \"platform\": \"string\",\n  \"project\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"slug\": \"string\"\n  },\n  \"type\": \"error\",\n  \"metadata\": {},\n  \"numComments\": 7621,\n  \"userCount\": 4742,\n  \"count\": \"string\",\n  \"firstSeen\": \"2019-12-29T09:43:05.889Z\",\n  \"lastSeen\": \"1979-04-08T20:28:04.890Z\",\n  \"assignedTo\": {},\n  \"tags\": [\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"totalValues\": 2018\n    },\n    {\n      \"key\": \"string\",\n      \"name\": \"string\",\n      \"totalValues\": 9789\n    }\n  ],\n  \"stats\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1fe79ca-a7a1-4810-9374-ae1f003fc562",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5e1a861d-f035-4970-b4d4-2572c8f9f7ff",
+          "name": "Delete an issue",
+          "request": {
+            "name": "Delete an issue",
+            "description": {
+              "content": "Permanently removes an issue and all associated events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "71cdc6b5-dca4-4c1d-a1d2-e414850731b3",
+              "name": "Issue deletion queued",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "515be208-3605-41e0-bef6-ca154cbdfff2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6a2aebff-9875-4485-9013-51cf88b5159c",
+          "name": "List an issue's events",
+          "request": {
+            "name": "List an issue's events",
+            "description": {
+              "content": "Returns a list of error events bound to an issue.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                "events",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "full",
+                  "value": "false",
+                  "description": "Return full event data including stack traces"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7580afa5-4de1-49d2-8f27-ab190414158b",
+              "name": "List of events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "full",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"2015-04-17T17:41:42.113Z\",\n    \"dateReceived\": \"1950-12-12T08:46:11.572Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"error\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"breadcrumbs\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"request\",\n        \"data\": {}\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"1968-06-13T09:22:12.393Z\",\n    \"dateReceived\": \"1980-03-08T13:58:15.554Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"fatal\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"exception\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"stacktrace\",\n        \"data\": {}\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "61ddb57f-e28e-4f59-b818-5ca29b58fff7",
+      "name": "Organizations",
+      "description": {
+        "content": "Organization-level resources",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bd2da9dd-54b2-44b5-b010-7accaef750fc",
+          "name": "List organizations",
+          "request": {
+            "name": "List organizations",
+            "description": {
+              "content": "Returns a list of organizations available to the authenticated user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "member",
+                  "value": "<boolean>",
+                  "description": "Restrict results to organizations where user is a member"
+                },
+                {
+                  "disabled": false,
+                  "key": "owner",
+                  "value": "<boolean>",
+                  "description": "Restrict results to organizations where user is an owner"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "09d8ce0c-1604-4cf2-81e7-0091457058ba",
+              "name": "List of organizations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "owner",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"slug\": \"string\",\n    \"name\": \"string\",\n    \"dateCreated\": \"1962-03-12T01:44:39.029Z\",\n    \"status\": {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"avatar\": {\n      \"avatarType\": \"string\",\n      \"avatarUuid\": \"string\"\n    },\n    \"isEarlyAdopter\": false,\n    \"requiresSso\": false,\n    \"plan\": \"string\",\n    \"planDetails\": {}\n  },\n  {\n    \"id\": \"string\",\n    \"slug\": \"string\",\n    \"name\": \"string\",\n    \"dateCreated\": \"2024-01-22T04:52:54.702Z\",\n    \"status\": {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"avatar\": {\n      \"avatarType\": \"string\",\n      \"avatarUuid\": \"string\"\n    },\n    \"isEarlyAdopter\": true,\n    \"requiresSso\": false,\n    \"plan\": \"string\",\n    \"planDetails\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab7a9328-21a6-4dc0-b8da-a8a8d3b4cee3",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "member",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "owner",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\",\n  \"errors\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1573d824-0abd-4d0f-9630-7a3f3b3daf75",
+          "name": "Retrieve an organization",
+          "request": {
+            "name": "Retrieve an organization",
+            "description": {
+              "content": "Returns details for a specific organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "061d6055-08d5-4aab-b1cf-7c3e01890014",
+              "name": "Organization details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"slug\": \"string\",\n  \"name\": \"string\",\n  \"dateCreated\": \"1970-01-26T23:52:36.250Z\",\n  \"status\": {\n    \"id\": \"string\",\n    \"name\": \"string\"\n  },\n  \"features\": [\n    \"string\",\n    \"string\"\n  ],\n  \"avatar\": {\n    \"avatarType\": \"string\",\n    \"avatarUuid\": \"string\"\n  },\n  \"isEarlyAdopter\": true,\n  \"requiresSso\": false,\n  \"plan\": \"string\",\n  \"planDetails\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0d3d7e5-84ea-4d5f-b60d-68d1b519fa79",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fe89b35-3d6f-4d25-8b50-6213036d9fca",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "955153ff-0848-4dd8-9ef4-092369a52e71",
+      "name": "Projects",
+      "description": {
+        "content": "Project management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1ee57fc4-b1fd-4979-826b-2532fdcfcc9a",
+          "name": "Retrieve a project",
+          "request": {
+            "name": "Retrieve a project",
+            "description": {
+              "content": "Returns details for a specific project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "projects",
+                ":organization_slug",
+                ":project_slug",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_slug",
+                  "description": "(Required) Project slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "97bb5d87-b4a5-408c-ac08-80aa14b247a3",
+              "name": "Project details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":organization_slug",
+                    ":project_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_slug",
+                      "description": "(Required) Project slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"slug\": \"string\",\n  \"name\": \"string\",\n  \"platform\": \"python\",\n  \"dateCreated\": \"1984-12-09T22:39:24.023Z\",\n  \"isBookmarked\": false,\n  \"isMember\": false,\n  \"features\": [\n    \"string\",\n    \"string\"\n  ],\n  \"firstEvent\": \"2016-06-20T18:38:07.785Z\",\n  \"organization\": {\n    \"id\": \"string\",\n    \"slug\": \"string\",\n    \"name\": \"string\"\n  },\n  \"latestRelease\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f34d92a5-5a0d-4821-9b53-886c2c3a2942",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":organization_slug",
+                    ":project_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_slug",
+                      "description": "(Required) Project slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0a9feaf0-522f-490c-a06e-d3bac013fd86",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":organization_slug",
+                    ":project_slug",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_slug",
+                      "description": "(Required) Project slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b6d3cb4-5321-49af-ba6a-87ae57782e3b",
+          "name": "List projects for an organization",
+          "request": {
+            "name": "List projects for an organization",
+            "description": {
+              "content": "Returns a list of projects within an organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "projects",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "61c936a6-2207-4cc3-bcec-8f708bec5084",
+              "name": "List of projects",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "projects",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"slug\": \"string\",\n    \"name\": \"string\",\n    \"platform\": \"python\",\n    \"dateCreated\": \"2019-03-09T15:22:50.392Z\",\n    \"isBookmarked\": true,\n    \"isMember\": true,\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"firstEvent\": \"2009-06-29T09:57:59.282Z\",\n    \"organization\": {\n      \"id\": \"string\",\n      \"slug\": \"string\",\n      \"name\": \"string\"\n    },\n    \"latestRelease\": {}\n  },\n  {\n    \"id\": \"string\",\n    \"slug\": \"string\",\n    \"name\": \"string\",\n    \"platform\": \"python\",\n    \"dateCreated\": \"1990-04-30T20:47:29.953Z\",\n    \"isBookmarked\": false,\n    \"isMember\": false,\n    \"features\": [\n      \"string\",\n      \"string\"\n    ],\n    \"firstEvent\": \"2020-05-26T15:32:37.429Z\",\n    \"organization\": {\n      \"id\": \"string\",\n      \"slug\": \"string\",\n      \"name\": \"string\"\n    },\n    \"latestRelease\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "235a69c1-aa92-446a-b58d-7cf6f57643a2",
+      "name": "Releases",
+      "description": {
+        "content": "Release and deployment tracking",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b61e55af-6ccb-47c6-b1dd-1b1c4fe8b842",
+          "name": "List releases for an organization",
+          "request": {
+            "name": "List releases for an organization",
+            "description": {
+              "content": "Returns a list of releases associated with the organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "releases",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4723ed46-3a1a-4e12-9719-07fce3e419f9",
+              "name": "List of releases",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "releases",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 4105,\n    \"version\": \"string\",\n    \"shortVersion\": \"string\",\n    \"dateCreated\": \"1950-05-04T16:07:44.722Z\",\n    \"dateReleased\": \"1960-11-11T18:27:34.787Z\",\n    \"firstEvent\": \"1981-02-04T00:58:21.599Z\",\n    \"lastEvent\": \"1968-09-22T20:48:49.649Z\",\n    \"newGroups\": 3958,\n    \"commitCount\": 5698,\n    \"deployCount\": 5830,\n    \"projects\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      }\n    ],\n    \"ref\": \"string\",\n    \"url\": \"http://zbIcdlonqbIKDtxpISHZIdvSBbudVBuV.haop-Iwb\"\n  },\n  {\n    \"id\": 469,\n    \"version\": \"string\",\n    \"shortVersion\": \"string\",\n    \"dateCreated\": \"1974-01-05T11:53:57.771Z\",\n    \"dateReleased\": \"1958-10-04T00:47:19.909Z\",\n    \"firstEvent\": \"1989-06-06T05:10:03.215Z\",\n    \"lastEvent\": \"1956-07-27T21:32:24.314Z\",\n    \"newGroups\": 29,\n    \"commitCount\": 422,\n    \"deployCount\": 3613,\n    \"projects\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      }\n    ],\n    \"ref\": \"string\",\n    \"url\": \"https://UVaASXLStYNudWmEaLLjXJlxiZfT.llzNvEZwau28KUfC3XLpRZZR,RFGxuDvrJeXCVSJS8c96FMt,W.L\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f1713c99-5440-42a5-a508-5451bf9c005a",
+          "name": "Create a release",
+          "request": {
+            "name": "Create a release",
+            "description": {
+              "content": "Creates a new release for tracking deployments and source maps.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "releases",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\",\n  \"commits\": [\n    \"<object>\",\n    \"<object>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "81c2b033-470c-42d3-ab81-a30fac88b121",
+              "name": "Release created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "releases",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\",\n  \"commits\": [\n    \"<object>\",\n    \"<object>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 3732,\n  \"version\": \"string\",\n  \"shortVersion\": \"string\",\n  \"dateCreated\": \"1964-02-11T23:08:57.105Z\",\n  \"dateReleased\": \"1966-09-27T18:04:37.617Z\",\n  \"firstEvent\": \"1999-05-15T10:02:52.081Z\",\n  \"lastEvent\": \"1954-05-23T08:44:37.942Z\",\n  \"newGroups\": 157,\n  \"commitCount\": 2703,\n  \"deployCount\": 892,\n  \"projects\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    }\n  ],\n  \"ref\": \"string\",\n  \"url\": \"https://PVkAfuMFOLTF.arcxIRdoi5rgjzllj3cCcsTbyO6JcF7enVWpfYEj\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sentry.io/api/0",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "865046b3-21cb-44a8-8de4-26590a184014",
+    "name": "Sentry Error Monitoring API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.\n\nContact Support:\n Name: Sentry Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1968 @@
+{
+  "info": {
+    "_postman_id": "f4cb8935-eeef-4aba-83d4-a5e74982ea8b",
+    "name": "Sentry Error Monitoring API",
+    "description": "Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.\n\nContact Support:\n Name: Sentry Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T16:56:20.000Z",
+    "updatedAt": "2026-06-05T16:56:20.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f4cb8935-eeef-4aba-83d4-a5e74982ea8b"
+  },
+  "item": [
+    {
+      "name": "organizations",
+      "item": [
+        {
+          "name": "{organization_slug}",
+          "item": [
+            {
+              "name": "issues",
+              "item": [
+                {
+                  "name": "{issue_id}",
+                  "item": [
+                    {
+                      "name": "events",
+                      "item": [
+                        {
+                          "name": "List an issue's events",
+                          "id": "587ef073-b24d-47a5-bc24-6e14771f43d1",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/events/?full=false&limit=100",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                "events",
+                                ""
+                              ],
+                              "query": [
+                                {
+                                  "description": "Return full event data including stack traces",
+                                  "key": "full",
+                                  "value": "false"
+                                },
+                                {
+                                  "key": "limit",
+                                  "value": "100"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "id": "18449493-797f-4f5b-823d-04cfe19c09da",
+                                  "key": "organization_slug",
+                                  "value": "<string>",
+                                  "description": "(Required) Organization slug"
+                                },
+                                {
+                                  "id": "39445d2e-9e3f-4486-a1e1-f0c584f9e1f4",
+                                  "key": "issue_id",
+                                  "value": "<string>",
+                                  "description": "(Required) "
+                                }
+                              ]
+                            },
+                            "description": "Returns a list of error events bound to an issue."
+                          },
+                          "response": [
+                            {
+                              "id": "2ad65432-1815-4c27-888b-b3c328e1e20c",
+                              "name": "List of events",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "Authorization",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/events/?full=false&limit=100",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "organizations",
+                                    ":organization_slug",
+                                    "issues",
+                                    ":issue_id",
+                                    "events",
+                                    ""
+                                  ],
+                                  "query": [
+                                    {
+                                      "description": "Return full event data including stack traces",
+                                      "key": "full",
+                                      "value": "false"
+                                    },
+                                    {
+                                      "key": "limit",
+                                      "value": "100"
+                                    }
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "organization_slug"
+                                    },
+                                    {
+                                      "key": "issue_id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"eventId\": \"<string>\",\n    \"groupId\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"dateReceived\": \"<dateTime>\",\n    \"type\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"message\": \"<string>\",\n    \"title\": \"<string>\",\n    \"location\": \"<string>\",\n    \"culprit\": \"<string>\",\n    \"level\": \"fatal\",\n    \"tags\": [\n      {\n        \"key\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"<string>\",\n      \"email\": \"<string>\",\n      \"username\": \"<string>\",\n      \"ipAddress\": \"<string>\"\n    },\n    \"sdk\": {\n      \"name\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"request\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"template\",\n        \"data\": {}\n      }\n    ]\n  },\n  {\n    \"id\": \"<string>\",\n    \"eventId\": \"<string>\",\n    \"groupId\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"dateReceived\": \"<dateTime>\",\n    \"type\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"message\": \"<string>\",\n    \"title\": \"<string>\",\n    \"location\": \"<string>\",\n    \"culprit\": \"<string>\",\n    \"level\": \"fatal\",\n    \"tags\": [\n      {\n        \"key\": \"<string>\",\n        \"value\": \"<string>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"value\": \"<string>\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"<string>\",\n      \"email\": \"<string>\",\n      \"username\": \"<string>\",\n      \"ipAddress\": \"<string>\"\n    },\n    \"sdk\": {\n      \"name\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"message\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"message\",\n        \"data\": {}\n      }\n    ]\n  }\n]",
+                              "createdAt": "2026-06-05T16:56:20.000Z",
+                              "updatedAt": "2026-06-05T16:56:20.000Z",
+                              "uid": "35240-2ad65432-1815-4c27-888b-b3c328e1e20c"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-587ef073-b24d-47a5-bc24-6e14771f43d1"
+                        }
+                      ],
+                      "id": "427d580f-2f7d-44be-81b1-64b7f9978333",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-427d580f-2f7d-44be-81b1-64b7f9978333"
+                    },
+                    {
+                      "name": "Retrieve an issue",
+                      "id": "9a4a79be-ef5f-4956-970f-c64fed6d3c43",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "issues",
+                            ":issue_id",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "id": "4ec53878-11f7-4e97-aba8-4f615a535493",
+                              "key": "organization_slug",
+                              "value": "<string>",
+                              "description": "(Required) Organization slug"
+                            },
+                            {
+                              "id": "6f25a812-c0f8-4d83-a460-243d6ae42ddb",
+                              "key": "issue_id",
+                              "value": "<string>",
+                              "description": "(Required) Issue ID"
+                            }
+                          ]
+                        },
+                        "description": "Returns detailed stats and metadata for a specific issue."
+                      },
+                      "response": [
+                        {
+                          "id": "02db565e-5be8-45ee-8e2b-c682c107a66b",
+                          "name": "Issue details",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"shortId\": \"<string>\",\n  \"title\": \"<string>\",\n  \"culprit\": \"<string>\",\n  \"permalink\": \"<uri>\",\n  \"logger\": \"<string>\",\n  \"level\": \"debug\",\n  \"status\": \"unresolved\",\n  \"isPublic\": \"<boolean>\",\n  \"platform\": \"<string>\",\n  \"project\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"slug\": \"<string>\"\n  },\n  \"type\": \"default\",\n  \"metadata\": {},\n  \"numComments\": \"<integer>\",\n  \"userCount\": \"<integer>\",\n  \"count\": \"<string>\",\n  \"firstSeen\": \"<dateTime>\",\n  \"lastSeen\": \"<dateTime>\",\n  \"assignedTo\": {},\n  \"tags\": [\n    {\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"totalValues\": \"<integer>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"totalValues\": \"<integer>\"\n    }\n  ],\n  \"stats\": {}\n}",
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-02db565e-5be8-45ee-8e2b-c682c107a66b"
+                        },
+                        {
+                          "id": "164ed889-1810-4776-aa85-c3620c3a1c66",
+                          "name": "Not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-164ed889-1810-4776-aa85-c3620c3a1c66"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-9a4a79be-ef5f-4956-970f-c64fed6d3c43"
+                    },
+                    {
+                      "name": "Update an issue",
+                      "id": "7ddfb3a2-7d34-4ce6-a68f-1215bdb53c92",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"unresolved\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"critical\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "issues",
+                            ":issue_id",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "id": "6add83a0-d64a-4c43-a4e5-0f642e53621f",
+                              "key": "organization_slug",
+                              "value": "<string>",
+                              "description": "(Required) Organization slug"
+                            },
+                            {
+                              "id": "0d9d18ad-2880-42c0-aecb-56981679d25c",
+                              "key": "issue_id",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "Updates attributes of an issue such as status, assignee, or priority."
+                      },
+                      "response": [
+                        {
+                          "id": "7845b4f0-62c0-47e6-b8a5-1353c7a2fe5c",
+                          "name": "Issue updated",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"status\": \"unresolved\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"critical\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"shortId\": \"<string>\",\n  \"title\": \"<string>\",\n  \"culprit\": \"<string>\",\n  \"permalink\": \"<uri>\",\n  \"logger\": \"<string>\",\n  \"level\": \"debug\",\n  \"status\": \"unresolved\",\n  \"isPublic\": \"<boolean>\",\n  \"platform\": \"<string>\",\n  \"project\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"slug\": \"<string>\"\n  },\n  \"type\": \"default\",\n  \"metadata\": {},\n  \"numComments\": \"<integer>\",\n  \"userCount\": \"<integer>\",\n  \"count\": \"<string>\",\n  \"firstSeen\": \"<dateTime>\",\n  \"lastSeen\": \"<dateTime>\",\n  \"assignedTo\": {},\n  \"tags\": [\n    {\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"totalValues\": \"<integer>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"totalValues\": \"<integer>\"\n    }\n  ],\n  \"stats\": {}\n}",
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-7845b4f0-62c0-47e6-b8a5-1353c7a2fe5c"
+                        },
+                        {
+                          "id": "d07c5a35-bb69-48ba-a44a-cc4acc8c3bf7",
+                          "name": "Forbidden",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"status\": \"unresolved\",\n  \"assignedTo\": \"<string>\",\n  \"hasSeen\": \"<boolean>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isSubscribed\": \"<boolean>\",\n  \"priority\": \"critical\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-d07c5a35-bb69-48ba-a44a-cc4acc8c3bf7"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-7ddfb3a2-7d34-4ce6-a68f-1215bdb53c92"
+                    },
+                    {
+                      "name": "Delete an issue",
+                      "id": "26d7395b-9f4c-4f53-bb52-c2acd9c4decd",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "issues",
+                            ":issue_id",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "id": "616e6077-c85b-4e61-a34e-d96d13d33cb1",
+                              "key": "organization_slug",
+                              "value": "<string>",
+                              "description": "(Required) Organization slug"
+                            },
+                            {
+                              "id": "7c683b18-2ab0-4d64-a183-a5fc93ad0c88",
+                              "key": "issue_id",
+                              "value": "<string>",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "description": "Permanently removes an issue and all associated events."
+                      },
+                      "response": [
+                        {
+                          "id": "23f7cd2f-ea40-4ec3-ac10-6e4aa606ef11",
+                          "name": "Issue deletion queued",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Accepted",
+                          "code": 202,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-23f7cd2f-ea40-4ec3-ac10-6e4aa606ef11"
+                        },
+                        {
+                          "id": "c54cf227-4986-4dc0-a333-21e5d3c483c3",
+                          "name": "Forbidden",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "Authorization",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/organizations/:organization_slug/issues/:issue_id/",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "organizations",
+                                ":organization_slug",
+                                "issues",
+                                ":issue_id",
+                                ""
+                              ],
+                              "variable": [
+                                {
+                                  "key": "organization_slug"
+                                },
+                                {
+                                  "key": "issue_id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-06-05T16:56:20.000Z",
+                          "updatedAt": "2026-06-05T16:56:20.000Z",
+                          "uid": "35240-c54cf227-4986-4dc0-a333-21e5d3c483c3"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-26d7395b-9f4c-4f53-bb52-c2acd9c4decd"
+                    }
+                  ],
+                  "id": "26fccfcb-f600-49cb-b48d-a9e8e38db045",
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-26fccfcb-f600-49cb-b48d-a9e8e38db045"
+                },
+                {
+                  "name": "List issues for an organization",
+                  "id": "e4ef1a85-f1be-43a6-ab57-df38c7f7aafc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/issues/?project=<integer>&project=<integer>&query=<string>&statsPeriod=<string>&start=<dateTime>&end=<dateTime>&limit=25&cursor=<string>&sort=date",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        "issues",
+                        ""
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by project ID(s)",
+                          "key": "project",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "Filter by project ID(s)",
+                          "key": "project",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "Sentry query string (e.g., \"is:unresolved assigned:me\")",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Time range (e.g., 14d, 24h, 1h)",
+                          "key": "statsPeriod",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "start",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "key": "end",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "25"
+                        },
+                        {
+                          "description": "Pagination cursor from previous response",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "sort",
+                          "value": "date"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "cd663ac5-4dcb-42e3-926e-7a771ebed05b",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of issues (error aggregations) for the organization. Supports filtering by project, query, date range, status, and assignee. Replaces the deprecated project-scoped issues endpoint."
+                  },
+                  "response": [
+                    {
+                      "id": "d77b7580-fa0b-4994-9749-d0847c7efeac",
+                      "name": "List of issues",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/issues/?project=<integer>&query=<string>&statsPeriod=<string>&start=<dateTime>&end=<dateTime>&limit=25&cursor=<string>&sort=date",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "issues",
+                            ""
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by project ID(s)",
+                              "key": "project",
+                              "value": "<integer>"
+                            },
+                            {
+                              "description": "Sentry query string (e.g., \"is:unresolved assigned:me\")",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Time range (e.g., 14d, 24h, 1h)",
+                              "key": "statsPeriod",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "start",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "key": "end",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "25"
+                            },
+                            {
+                              "description": "Pagination cursor from previous response",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "date"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "Pagination links (rel=next, rel=previous)",
+                            "type": "text/plain"
+                          },
+                          "key": "Link",
+                          "value": "<string>"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"id\": \"<string>\",\n    \"shortId\": \"<string>\",\n    \"title\": \"<string>\",\n    \"culprit\": \"<string>\",\n    \"permalink\": \"<uri>\",\n    \"logger\": \"<string>\",\n    \"level\": \"warning\",\n    \"status\": \"resolved\",\n    \"isPublic\": \"<boolean>\",\n    \"platform\": \"<string>\",\n    \"project\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\"\n    },\n    \"type\": \"error\",\n    \"metadata\": {},\n    \"numComments\": \"<integer>\",\n    \"userCount\": \"<integer>\",\n    \"count\": \"<string>\",\n    \"firstSeen\": \"<dateTime>\",\n    \"lastSeen\": \"<dateTime>\",\n    \"assignedTo\": {},\n    \"tags\": [\n      {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"totalValues\": \"<integer>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"totalValues\": \"<integer>\"\n      }\n    ],\n    \"stats\": {}\n  },\n  {\n    \"id\": \"<string>\",\n    \"shortId\": \"<string>\",\n    \"title\": \"<string>\",\n    \"culprit\": \"<string>\",\n    \"permalink\": \"<uri>\",\n    \"logger\": \"<string>\",\n    \"level\": \"debug\",\n    \"status\": \"ignored\",\n    \"isPublic\": \"<boolean>\",\n    \"platform\": \"<string>\",\n    \"project\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\"\n    },\n    \"type\": \"error\",\n    \"metadata\": {},\n    \"numComments\": \"<integer>\",\n    \"userCount\": \"<integer>\",\n    \"count\": \"<string>\",\n    \"firstSeen\": \"<dateTime>\",\n    \"lastSeen\": \"<dateTime>\",\n    \"assignedTo\": {},\n    \"tags\": [\n      {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"totalValues\": \"<integer>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"totalValues\": \"<integer>\"\n      }\n    ],\n    \"stats\": {}\n  }\n]",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-d77b7580-fa0b-4994-9749-d0847c7efeac"
+                    },
+                    {
+                      "id": "59fbce61-4937-463a-b613-c8671e159307",
+                      "name": "Forbidden",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/issues/?project=<integer>&query=<string>&statsPeriod=<string>&start=<dateTime>&end=<dateTime>&limit=25&cursor=<string>&sort=date",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "issues",
+                            ""
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter by project ID(s)",
+                              "key": "project",
+                              "value": "<integer>"
+                            },
+                            {
+                              "description": "Sentry query string (e.g., \"is:unresolved assigned:me\")",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Time range (e.g., 14d, 24h, 1h)",
+                              "key": "statsPeriod",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "start",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "key": "end",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "25"
+                            },
+                            {
+                              "description": "Pagination cursor from previous response",
+                              "key": "cursor",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "sort",
+                              "value": "date"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-59fbce61-4937-463a-b613-c8671e159307"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-e4ef1a85-f1be-43a6-ab57-df38c7f7aafc"
+                }
+              ],
+              "id": "76c9995b-2f2d-4612-baa6-835b6cd5bb87",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-76c9995b-2f2d-4612-baa6-835b6cd5bb87"
+            },
+            {
+              "name": "projects",
+              "item": [
+                {
+                  "name": "List projects for an organization",
+                  "id": "b17c10b8-f7fc-419b-bc96-7fc1ef109131",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/projects/?query=<string>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        "projects",
+                        ""
+                      ],
+                      "query": [
+                        {
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "02f42b71-ad30-4f84-928b-ca8a3101904e",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of projects within an organization."
+                  },
+                  "response": [
+                    {
+                      "id": "b991a72a-f3c8-4ba9-8782-1bccd758c04b",
+                      "name": "List of projects",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/projects/?query=<string>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "projects",
+                            ""
+                          ],
+                          "query": [
+                            {
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"id\": \"<string>\",\n    \"slug\": \"<string>\",\n    \"name\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"isBookmarked\": \"<boolean>\",\n    \"isMember\": \"<boolean>\",\n    \"features\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"firstEvent\": \"<dateTime>\",\n    \"organization\": {\n      \"id\": \"<string>\",\n      \"slug\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    \"latestRelease\": {}\n  },\n  {\n    \"id\": \"<string>\",\n    \"slug\": \"<string>\",\n    \"name\": \"<string>\",\n    \"platform\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"isBookmarked\": \"<boolean>\",\n    \"isMember\": \"<boolean>\",\n    \"features\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"firstEvent\": \"<dateTime>\",\n    \"organization\": {\n      \"id\": \"<string>\",\n      \"slug\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    \"latestRelease\": {}\n  }\n]",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-b991a72a-f3c8-4ba9-8782-1bccd758c04b"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-b17c10b8-f7fc-419b-bc96-7fc1ef109131"
+                }
+              ],
+              "id": "2df90564-3a3b-4101-bc9e-d355a2d399ab",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-2df90564-3a3b-4101-bc9e-d355a2d399ab"
+            },
+            {
+              "name": "releases",
+              "item": [
+                {
+                  "name": "List releases for an organization",
+                  "id": "4be96ffc-8213-47b4-96e2-5260d41b6ad4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/releases/?query=<string>&project=<integer>&limit=25",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        "releases",
+                        ""
+                      ],
+                      "query": [
+                        {
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "project",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "25"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "67520d62-0739-463c-ae88-25ecf88372a1",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        }
+                      ]
+                    },
+                    "description": "Returns a list of releases associated with the organization."
+                  },
+                  "response": [
+                    {
+                      "id": "72025917-5e97-43c0-abdf-4aa7d11efd26",
+                      "name": "List of releases",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/releases/?query=<string>&project=<integer>&limit=25",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "releases",
+                            ""
+                          ],
+                          "query": [
+                            {
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "key": "project",
+                              "value": "<integer>"
+                            },
+                            {
+                              "key": "limit",
+                              "value": "25"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"id\": \"<integer>\",\n    \"version\": \"<string>\",\n    \"shortVersion\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"dateReleased\": \"<dateTime>\",\n    \"firstEvent\": \"<dateTime>\",\n    \"lastEvent\": \"<dateTime>\",\n    \"newGroups\": \"<integer>\",\n    \"commitCount\": \"<integer>\",\n    \"deployCount\": \"<integer>\",\n    \"projects\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      }\n    ],\n    \"ref\": \"<string>\",\n    \"url\": \"<uri>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"version\": \"<string>\",\n    \"shortVersion\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"dateReleased\": \"<dateTime>\",\n    \"firstEvent\": \"<dateTime>\",\n    \"lastEvent\": \"<dateTime>\",\n    \"newGroups\": \"<integer>\",\n    \"commitCount\": \"<integer>\",\n    \"deployCount\": \"<integer>\",\n    \"projects\": [\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      },\n      {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"slug\": \"<string>\"\n      }\n    ],\n    \"ref\": \"<string>\",\n    \"url\": \"<uri>\"\n  }\n]",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-72025917-5e97-43c0-abdf-4aa7d11efd26"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-4be96ffc-8213-47b4-96e2-5260d41b6ad4"
+                },
+                {
+                  "name": "Create a release",
+                  "id": "0d8dad23-6453-4a8d-919d-e8320f267ae1",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/releases/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        "releases",
+                        ""
+                      ],
+                      "variable": [
+                        {
+                          "id": "b4e35257-a351-4c8a-8ef2-d141594f7077",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        }
+                      ]
+                    },
+                    "description": "Creates a new release for tracking deployments and source maps."
+                  },
+                  "response": [
+                    {
+                      "id": "413a7de1-9345-43e7-bda7-07e5c8295d8b",
+                      "name": "Release created",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/releases/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "releases",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<integer>\",\n  \"version\": \"<string>\",\n  \"shortVersion\": \"<string>\",\n  \"dateCreated\": \"<dateTime>\",\n  \"dateReleased\": \"<dateTime>\",\n  \"firstEvent\": \"<dateTime>\",\n  \"lastEvent\": \"<dateTime>\",\n  \"newGroups\": \"<integer>\",\n  \"commitCount\": \"<integer>\",\n  \"deployCount\": \"<integer>\",\n  \"projects\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"slug\": \"<string>\"\n    }\n  ],\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\"\n}",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-413a7de1-9345-43e7-bda7-07e5c8295d8b"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-0d8dad23-6453-4a8d-919d-e8320f267ae1"
+                }
+              ],
+              "id": "77873c28-9391-4ab3-b342-5b39891c1d9a",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-77873c28-9391-4ab3-b342-5b39891c1d9a"
+            },
+            {
+              "name": "alert-rules",
+              "item": [
+                {
+                  "name": "List alert rules",
+                  "id": "e3d743e4-3ecb-4357-8ffe-b5fd8da2d8d4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/alert-rules/?project=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        "alert-rules",
+                        ""
+                      ],
+                      "query": [
+                        {
+                          "key": "project",
+                          "value": "<integer>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "fbedea41-18e5-488d-810b-ab71171b2516",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        }
+                      ]
+                    },
+                    "description": "Returns all metric and issue alert rules for an organization."
+                  },
+                  "response": [
+                    {
+                      "id": "cfc1cee3-80ad-4a40-bfee-3d08713fe7b7",
+                      "name": "List of alert rules",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/organizations/:organization_slug/alert-rules/?project=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "organizations",
+                            ":organization_slug",
+                            "alert-rules",
+                            ""
+                          ],
+                          "query": [
+                            {
+                              "key": "project",
+                              "value": "<integer>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"environment\": \"<string>\",\n    \"dataset\": \"sessions\",\n    \"query\": \"<string>\",\n    \"aggregate\": \"<string>\",\n    \"timeWindow\": \"<integer>\",\n    \"thresholdType\": \"<integer>\",\n    \"resolveThreshold\": \"<number>\",\n    \"projects\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"owner\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"environment\": \"<string>\",\n    \"dataset\": \"transactions\",\n    \"query\": \"<string>\",\n    \"aggregate\": \"<string>\",\n    \"timeWindow\": \"<integer>\",\n    \"thresholdType\": \"<integer>\",\n    \"resolveThreshold\": \"<number>\",\n    \"projects\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"owner\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\"\n  }\n]",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-cfc1cee3-80ad-4a40-bfee-3d08713fe7b7"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-e3d743e4-3ecb-4357-8ffe-b5fd8da2d8d4"
+                }
+              ],
+              "id": "11ce3938-b6c0-4192-9d24-5487a5ee1b75",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-11ce3938-b6c0-4192-9d24-5487a5ee1b75"
+            },
+            {
+              "name": "Retrieve an organization",
+              "id": "e12f20c3-3c77-4569-a848-cef583e85d27",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations/:organization_slug/",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    ""
+                  ],
+                  "variable": [
+                    {
+                      "id": "ae1d67e0-278a-42eb-9321-e7deae660df7",
+                      "key": "organization_slug",
+                      "value": "<string>",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "description": "Returns details for a specific organization."
+              },
+              "response": [
+                {
+                  "id": "76ea5b51-a0ac-431f-94e1-f31b98efeac1",
+                  "name": "Organization details",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        ""
+                      ],
+                      "variable": [
+                        {
+                          "key": "organization_slug"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"name\": \"<string>\",\n  \"dateCreated\": \"<dateTime>\",\n  \"status\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"features\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"avatar\": {\n    \"avatarType\": \"<string>\",\n    \"avatarUuid\": \"<string>\"\n  },\n  \"isEarlyAdopter\": \"<boolean>\",\n  \"requiresSso\": \"<boolean>\",\n  \"plan\": \"<string>\",\n  \"planDetails\": {}\n}",
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-76ea5b51-a0ac-431f-94e1-f31b98efeac1"
+                },
+                {
+                  "id": "7c9b1f0b-440f-4244-9497-bb8d45de6a3e",
+                  "name": "Forbidden",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        ""
+                      ],
+                      "variable": [
+                        {
+                          "key": "organization_slug"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-7c9b1f0b-440f-4244-9497-bb8d45de6a3e"
+                },
+                {
+                  "id": "0699c54d-f9f7-45e3-87aa-c9978cc4e6e5",
+                  "name": "Not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "Authorization",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/organizations/:organization_slug/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "organizations",
+                        ":organization_slug",
+                        ""
+                      ],
+                      "variable": [
+                        {
+                          "key": "organization_slug"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-0699c54d-f9f7-45e3-87aa-c9978cc4e6e5"
+                }
+              ],
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-e12f20c3-3c77-4569-a848-cef583e85d27"
+            }
+          ],
+          "id": "8c69bb9c-f546-474e-88ee-3f42ddd9fa4f",
+          "createdAt": "2026-06-05T16:56:20.000Z",
+          "updatedAt": "2026-06-05T16:56:20.000Z",
+          "uid": "35240-8c69bb9c-f546-474e-88ee-3f42ddd9fa4f"
+        },
+        {
+          "name": "List organizations",
+          "id": "4b7fd6be-909c-4f57-bdb3-c693b0264846",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/?member=<boolean>&owner=<boolean>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                ""
+              ],
+              "query": [
+                {
+                  "description": "Restrict results to organizations where user is a member",
+                  "key": "member",
+                  "value": "<boolean>"
+                },
+                {
+                  "description": "Restrict results to organizations where user is an owner",
+                  "key": "owner",
+                  "value": "<boolean>"
+                }
+              ]
+            },
+            "description": "Returns a list of organizations available to the authenticated user."
+          },
+          "response": [
+            {
+              "id": "12863670-7f82-4a31-868b-b07de8bea91a",
+              "name": "List of organizations",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations/?member=<boolean>&owner=<boolean>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "description": "Restrict results to organizations where user is a member",
+                      "key": "member",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "description": "Restrict results to organizations where user is an owner",
+                      "key": "owner",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"<string>\",\n    \"slug\": \"<string>\",\n    \"name\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"status\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    \"features\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"avatar\": {\n      \"avatarType\": \"<string>\",\n      \"avatarUuid\": \"<string>\"\n    },\n    \"isEarlyAdopter\": \"<boolean>\",\n    \"requiresSso\": \"<boolean>\",\n    \"plan\": \"<string>\",\n    \"planDetails\": {}\n  },\n  {\n    \"id\": \"<string>\",\n    \"slug\": \"<string>\",\n    \"name\": \"<string>\",\n    \"dateCreated\": \"<dateTime>\",\n    \"status\": {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\"\n    },\n    \"features\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"avatar\": {\n      \"avatarType\": \"<string>\",\n      \"avatarUuid\": \"<string>\"\n    },\n    \"isEarlyAdopter\": \"<boolean>\",\n    \"requiresSso\": \"<boolean>\",\n    \"plan\": \"<string>\",\n    \"planDetails\": {}\n  }\n]",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-12863670-7f82-4a31-868b-b07de8bea91a"
+            },
+            {
+              "id": "0302a02b-8e10-4fa2-9537-916766368d28",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/organizations/?member=<boolean>&owner=<boolean>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "organizations",
+                    ""
+                  ],
+                  "query": [
+                    {
+                      "description": "Restrict results to organizations where user is a member",
+                      "key": "member",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "description": "Restrict results to organizations where user is an owner",
+                      "key": "owner",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"detail\": \"<string>\",\n  \"errors\": {}\n}",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-0302a02b-8e10-4fa2-9537-916766368d28"
+            }
+          ],
+          "createdAt": "2026-06-05T16:56:20.000Z",
+          "updatedAt": "2026-06-05T16:56:20.000Z",
+          "uid": "35240-4b7fd6be-909c-4f57-bdb3-c693b0264846"
+        }
+      ],
+      "id": "026f59e5-0ca2-4ddd-9d4c-9f33b93565b6",
+      "createdAt": "2026-06-05T16:56:20.000Z",
+      "updatedAt": "2026-06-05T16:56:20.000Z",
+      "uid": "35240-026f59e5-0ca2-4ddd-9d4c-9f33b93565b6"
+    },
+    {
+      "name": "projects",
+      "item": [
+        {
+          "name": "{organization_slug}",
+          "item": [
+            {
+              "name": "{project_slug}",
+              "item": [
+                {
+                  "name": "Retrieve a project",
+                  "id": "474c47c5-1a78-4f78-b8d3-42b8579f2ccc",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projects/:organization_slug/:project_slug/",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "projects",
+                        ":organization_slug",
+                        ":project_slug",
+                        ""
+                      ],
+                      "variable": [
+                        {
+                          "id": "cfb33dca-fe90-45da-aafc-f87c22fa6b7b",
+                          "key": "organization_slug",
+                          "value": "<string>",
+                          "description": "(Required) Organization slug"
+                        },
+                        {
+                          "id": "5828f6dc-a6fe-4755-85af-cedbfb92277e",
+                          "key": "project_slug",
+                          "value": "<string>",
+                          "description": "(Required) Project slug"
+                        }
+                      ]
+                    },
+                    "description": "Returns details for a specific project."
+                  },
+                  "response": [
+                    {
+                      "id": "9cf6e6b9-7067-4922-b52c-1be38d98acbc",
+                      "name": "Project details",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:organization_slug/:project_slug/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":organization_slug",
+                            ":project_slug",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            },
+                            {
+                              "key": "project_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"slug\": \"<string>\",\n  \"name\": \"<string>\",\n  \"platform\": \"<string>\",\n  \"dateCreated\": \"<dateTime>\",\n  \"isBookmarked\": \"<boolean>\",\n  \"isMember\": \"<boolean>\",\n  \"features\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"firstEvent\": \"<dateTime>\",\n  \"organization\": {\n    \"id\": \"<string>\",\n    \"slug\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"latestRelease\": {}\n}",
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-9cf6e6b9-7067-4922-b52c-1be38d98acbc"
+                    },
+                    {
+                      "id": "c8e2ee0d-6483-4f81-9389-c907170997a4",
+                      "name": "Forbidden",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:organization_slug/:project_slug/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":organization_slug",
+                            ":project_slug",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            },
+                            {
+                              "key": "project_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-c8e2ee0d-6483-4f81-9389-c907170997a4"
+                    },
+                    {
+                      "id": "7c52c2a4-c071-4f46-af48-558e7021a9e9",
+                      "name": "Not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "Authorization",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:organization_slug/:project_slug/",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":organization_slug",
+                            ":project_slug",
+                            ""
+                          ],
+                          "variable": [
+                            {
+                              "key": "organization_slug"
+                            },
+                            {
+                              "key": "project_slug"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-06-05T16:56:20.000Z",
+                      "updatedAt": "2026-06-05T16:56:20.000Z",
+                      "uid": "35240-7c52c2a4-c071-4f46-af48-558e7021a9e9"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T16:56:20.000Z",
+                  "updatedAt": "2026-06-05T16:56:20.000Z",
+                  "uid": "35240-474c47c5-1a78-4f78-b8d3-42b8579f2ccc"
+                }
+              ],
+              "id": "c5e45825-09a0-47fe-98fb-2a9c735b7ec0",
+              "createdAt": "2026-06-05T16:56:20.000Z",
+              "updatedAt": "2026-06-05T16:56:20.000Z",
+              "uid": "35240-c5e45825-09a0-47fe-98fb-2a9c735b7ec0"
+            }
+          ],
+          "id": "7e07dd54-245e-4eac-8fea-8f31e8e64b65",
+          "createdAt": "2026-06-05T16:56:20.000Z",
+          "updatedAt": "2026-06-05T16:56:20.000Z",
+          "uid": "35240-7e07dd54-245e-4eac-8fea-8f31e8e64b65"
+        }
+      ],
+      "id": "57a0497b-429e-4185-ae7e-b26cddc7ab1a",
+      "createdAt": "2026-06-05T16:56:20.000Z",
+      "updatedAt": "2026-06-05T16:56:20.000Z",
+      "uid": "35240-57a0497b-429e-4185-ae7e-b26cddc7ab1a"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://sentry.io/api/0"
+    }
+  ]
+}

@@ -1,0 +1,420 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sentry Error Monitoring API",
+    "version": "0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/",
+            "params": [
+              {
+                "name": "member",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to organizations where user is a member"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to organizations where user is an owner"
+              }
+            ]
+          },
+          "docs": "Returns a list of organizations available to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Retrieve an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific organization."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Issues",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List issues for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "project",
+                "value": "",
+                "type": "query",
+                "description": "Filter by project ID(s)"
+              },
+              {
+                "name": "query",
+                "value": "is:unresolved",
+                "type": "query",
+                "description": "Sentry query string (e.g., \"is:unresolved assigned:me\")"
+              },
+              {
+                "name": "statsPeriod",
+                "value": "14d",
+                "type": "query",
+                "description": "Time range (e.g., 14d, 24h, 1h)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from previous response"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of issues (error aggregations) for the organization. Supports filtering by project, query, date range, status, and assignee. Replaces the deprecated project-scoped issues endpoint."
+        },
+        {
+          "info": {
+            "name": "Retrieve an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/:issue_id/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path",
+                "description": "Issue ID"
+              }
+            ]
+          },
+          "docs": "Returns detailed stats and metadata for a specific issue."
+        },
+        {
+          "info": {
+            "name": "Update an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/:issue_id/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates attributes of an issue such as status, assignee, or priority."
+        },
+        {
+          "info": {
+            "name": "Delete an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/:issue_id/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently removes an issue and all associated events."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List an issue's events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/:issue_id/events/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "full",
+                "value": "",
+                "type": "query",
+                "description": "Return full event data including stack traces"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of error events bound to an issue."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/projects/:organization_slug/:project_slug/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "project_slug",
+                "value": "my-project",
+                "type": "path",
+                "description": "Project slug"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific project."
+        },
+        {
+          "info": {
+            "name": "List projects for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/projects/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of projects within an organization."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Releases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List releases for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/releases/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "project",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of releases associated with the organization."
+        },
+        {
+          "info": {
+            "name": "Create a release",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/releases/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new release for tracking deployments and source maps."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Alerts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List alert rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/alert-rules/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "project",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all metric and issue alert rules for an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
