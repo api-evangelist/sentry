@@ -6,7 +6,7 @@ description: Sentry is a developer-first application monitoring platform that he
   replay, profiling, and release tracking for web, mobile, and backend applications
   across 22+ platforms and languages.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Error Monitoring
 - Debugging
