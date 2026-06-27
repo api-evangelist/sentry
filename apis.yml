@@ -90,33 +90,24 @@ apis:
 common:
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/sentry/overview
-- type: ArazzoWorkflows
-  url: arazzo/
-  workflows:
-  - url: arazzo/sentry-escalate-issue-workflow.yml
-    name: Sentry Escalate and Assign an Issue
-    summary: Find a high-severity unresolved issue, review its events, then escalate
-      priority and assign an owner.
-  - url: arazzo/sentry-investigate-project-issues-workflow.yml
-    name: Sentry Investigate a Project's Issues
-    summary: Confirm a project, list its issues, then drill into the top issue's detail
-      and events.
-  - url: arazzo/sentry-organization-survey-workflow.yml
-    name: Sentry Organization Monitoring Survey
-    summary: Resolve an organization, then inventory its projects, releases, and alert
-      rules.
-  - url: arazzo/sentry-resolve-issues-in-release-workflow.yml
-    name: Sentry Resolve Issues in the Next Release
-    summary: Create a release, then mark the noisiest unresolved issues as resolved
-      in that next release.
-  - url: arazzo/sentry-track-deployment-release-workflow.yml
-    name: Sentry Track a Deployment Release
-    summary: Idempotently record a release for a project, creating it only when it
-      does not already exist.
-  - url: arazzo/sentry-triage-issue-workflow.yml
-    name: Sentry Triage and Resolve an Issue
-    summary: Find the most relevant unresolved issue, inspect its events, then resolve
-      or reprioritize it.
+- type: Arazzo
+  url: arazzo/sentry-escalate-issue-workflow.yml
+  name: Sentry Escalate and Assign an Issue
+- type: Arazzo
+  url: arazzo/sentry-investigate-project-issues-workflow.yml
+  name: Sentry Investigate a Project's Issues
+- type: Arazzo
+  url: arazzo/sentry-organization-survey-workflow.yml
+  name: Sentry Organization Monitoring Survey
+- type: Arazzo
+  url: arazzo/sentry-resolve-issues-in-release-workflow.yml
+  name: Sentry Resolve Issues in the Next Release
+- type: Arazzo
+  url: arazzo/sentry-track-deployment-release-workflow.yml
+  name: Sentry Track a Deployment Release
+- type: Arazzo
+  url: arazzo/sentry-triage-issue-workflow.yml
+  name: Sentry Triage and Resolve an Issue
 - type: LinkedIn
   url: https://www.linkedin.com/company/getsentry
 - type: Website
@@ -149,7 +140,7 @@ common:
   url: https://sandbox.sentry.io/
 - type: Pricing
   url: https://sentry.io/pricing/
-- type: SignUp
+- type: Signup
   url: https://sentry.io/signup/
 - type: Login
   url: https://sentry.io/auth/login/
@@ -188,7 +179,7 @@ common:
   updated: '2026-05-04'
 - type: Integrations
   url: https://sentry.io/integrations/
-- type: LLMsTxt
+- type: LlmsText
   url: https://docs.sentry.io/llms.txt
 integrations:
 - name: Github

@@ -2,17 +2,17 @@
   "repo": "sentry",
   "feeds": [
     {
-      "source": "https://sentry.io/blog/",
-      "feed_url": "https://sentry.io/blog/",
+      "source": "https://blog.sentry.io/feed.xml",
+      "feed_url": "https://blog.sentry.io/feed.xml",
       "title": "",
       "saved": 0,
-      "method": "none"
+      "method": "feed"
     },
     {
       "source": "https://sentry.io/legal/privacy/",
       "error": "HTTPError"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "fetched": "2026-06-27T12:03:07Z",
+  "post_count": 0
 }
