@@ -1,0 +1,23 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/sentry-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: AuthToken
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'Format: Token YOUR_AUTH_TOKEN'
+  sources:
+  - openapi/sentry-api-openapi.yml
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: OAuth2 Bearer token for integrations
+  sources:
+  - openapi/sentry-api-openapi.yml

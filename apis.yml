@@ -88,6 +88,12 @@ apis:
   - type: AsyncAPI
     url: asyncapi/sentry-webhooks-asyncapi.yml
 common:
+- type: VulnerabilityDisclosure
+  url: security/sentry-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/sentry-domain-security.yml
+- type: Authentication
+  url: authentication/sentry-authentication.yml
 - type: PostmanWorkspace
   url: https://www.postman.com/kinlaneapi/sentry/overview
 - type: Arazzo
