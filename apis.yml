@@ -88,6 +88,8 @@ apis:
   - type: AsyncAPI
     url: asyncapi/sentry-webhooks-asyncapi.yml
 common:
+- type: AgenticAccess
+  url: agentic-access/sentry-agentic-access.yml
 - type: VulnerabilityDisclosure
   url: security/sentry-vulnerability-disclosure.yml
 - type: DomainSecurity
