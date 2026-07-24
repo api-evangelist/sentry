@@ -1,0 +1,170 @@
+openapi: 3.1.0
+info:
+  title: Sentry Error Monitoring Alerts Releases API
+  description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.
+  version: '0'
+  contact:
+    name: Sentry Support
+    url: https://sentry.io/support/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+servers:
+- url: https://sentry.io/api/0
+  description: Sentry SaaS API
+security:
+- AuthToken: []
+- BearerAuth: []
+tags:
+- name: Releases
+  description: Release and deployment tracking
+paths:
+  /organizations/{organization_slug}/releases/:
+    get:
+      operationId: listReleases
+      summary: List releases for an organization
+      description: Returns a list of releases associated with the organization.
+      tags:
+      - Releases
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: project
+        in: query
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+      responses:
+        '200':
+          description: List of releases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Release'
+    post:
+      operationId: createRelease
+      summary: Create a release
+      description: Creates a new release for tracking deployments and source maps.
+      tags:
+      - Releases
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReleaseCreate'
+      responses:
+        '201':
+          description: Release created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+components:
+  schemas:
+    ProjectRef:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+    Release:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        shortVersion:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        dateReleased:
+          type: string
+          format: date-time
+        firstEvent:
+          type: string
+          format: date-time
+        lastEvent:
+          type: string
+          format: date-time
+        newGroups:
+          type: integer
+        commitCount:
+          type: integer
+        deployCount:
+          type: integer
+        authors:
+          type: array
+          items:
+            type: object
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRef'
+        ref:
+          type: string
+          description: Git ref (branch or tag)
+        url:
+          type: string
+          format: uri
+    ReleaseCreate:
+      type: object
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          description: Release version string
+        ref:
+          type: string
+          description: Optional git ref
+        url:
+          type: string
+          format: uri
+        projects:
+          type: array
+          items:
+            type: string
+          description: List of project slugs
+        dateReleased:
+          type: string
+          format: date-time
+        commits:
+          type: array
+          items:
+            type: object
+  parameters:
+    OrganizationSlug:
+      name: organization_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization slug
+      example: my-organization
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Format: Token YOUR_AUTH_TOKEN'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: OAuth2 Bearer token for integrations

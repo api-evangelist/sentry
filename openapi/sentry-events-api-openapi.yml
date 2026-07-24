@@ -1,0 +1,158 @@
+openapi: 3.1.0
+info:
+  title: Sentry Error Monitoring Alerts Events API
+  description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.
+  version: '0'
+  contact:
+    name: Sentry Support
+    url: https://sentry.io/support/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+servers:
+- url: https://sentry.io/api/0
+  description: Sentry SaaS API
+security:
+- AuthToken: []
+- BearerAuth: []
+tags:
+- name: Events
+  description: Raw error events
+paths:
+  /organizations/{organization_slug}/issues/{issue_id}/events/:
+    get:
+      operationId: listIssueEvents
+      summary: List an issue's events
+      description: Returns a list of error events bound to an issue.
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      - name: issue_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: full
+        in: query
+        schema:
+          type: boolean
+          default: false
+        description: Return full event data including stack traces
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 100
+      responses:
+        '200':
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        eventId:
+          type: string
+        groupId:
+          type: string
+          description: Parent issue ID
+        dateCreated:
+          type: string
+          format: date-time
+        dateReceived:
+          type: string
+          format: date-time
+        type:
+          type: string
+        platform:
+          type: string
+        message:
+          type: string
+        title:
+          type: string
+        location:
+          type: string
+        culprit:
+          type: string
+        level:
+          type: string
+          enum:
+          - fatal
+          - error
+          - warning
+          - info
+          - debug
+        tags:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+              value:
+                type: string
+        user:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            username:
+              type: string
+            ipAddress:
+              type: string
+        sdk:
+          type: object
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+        contexts:
+          type: object
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - exception
+                - stacktrace
+                - breadcrumbs
+                - request
+                - message
+                - template
+              data:
+                type: object
+  parameters:
+    OrganizationSlug:
+      name: organization_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization slug
+      example: my-organization
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Format: Token YOUR_AUTH_TOKEN'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: OAuth2 Bearer token for integrations

@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: Sentry Error Monitoring Alerts API
+  description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.
+  version: '0'
+  contact:
+    name: Sentry Support
+    url: https://sentry.io/support/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+servers:
+- url: https://sentry.io/api/0
+  description: Sentry SaaS API
+security:
+- AuthToken: []
+- BearerAuth: []
+tags:
+- name: Alerts
+  description: Alert rules and notifications
+paths:
+  /organizations/{organization_slug}/alert-rules/:
+    get:
+      operationId: listAlertRules
+      summary: List alert rules
+      description: Returns all metric and issue alert rules for an organization.
+      tags:
+      - Alerts
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      - name: project
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: List of alert rules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertRule'
+components:
+  schemas:
+    AlertRule:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        environment:
+          type: string
+        dataset:
+          type: string
+          enum:
+          - events
+          - transactions
+          - sessions
+          - metrics
+        query:
+          type: string
+        aggregate:
+          type: string
+        timeWindow:
+          type: integer
+          description: Time window in minutes
+        thresholdType:
+          type: integer
+        resolveThreshold:
+          type: number
+        triggers:
+          type: array
+          items:
+            type: object
+        projects:
+          type: array
+          items:
+            type: string
+        owner:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+  parameters:
+    OrganizationSlug:
+      name: organization_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization slug
+      example: my-organization
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Format: Token YOUR_AUTH_TOKEN'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: OAuth2 Bearer token for integrations

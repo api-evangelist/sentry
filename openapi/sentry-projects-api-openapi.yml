@@ -1,0 +1,137 @@
+openapi: 3.1.0
+info:
+  title: Sentry Error Monitoring Alerts Projects API
+  description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.
+  version: '0'
+  contact:
+    name: Sentry Support
+    url: https://sentry.io/support/
+  license:
+    name: Sentry Terms of Service
+    url: https://sentry.io/terms/
+servers:
+- url: https://sentry.io/api/0
+  description: Sentry SaaS API
+security:
+- AuthToken: []
+- BearerAuth: []
+tags:
+- name: Projects
+  description: Project management
+paths:
+  /projects/{organization_slug}/{project_slug}/:
+    get:
+      operationId: retrieveProject
+      summary: Retrieve a project
+      description: Returns details for a specific project.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      - $ref: '#/components/parameters/ProjectSlug'
+      responses:
+        '200':
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /organizations/{organization_slug}/projects/:
+    get:
+      operationId: listProjects
+      summary: List projects for an organization
+      description: Returns a list of projects within an organization.
+      tags:
+      - Projects
+      parameters:
+      - $ref: '#/components/parameters/OrganizationSlug'
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+      responses:
+        '200':
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+          example: python
+        dateCreated:
+          type: string
+          format: date-time
+        isBookmarked:
+          type: boolean
+        isMember:
+          type: boolean
+        features:
+          type: array
+          items:
+            type: string
+        firstEvent:
+          type: string
+          format: date-time
+        organization:
+          $ref: '#/components/schemas/OrganizationRef'
+        latestRelease:
+          type: object
+    OrganizationRef:
+      type: object
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+  parameters:
+    ProjectSlug:
+      name: project_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Project slug
+      example: my-project
+    OrganizationSlug:
+      name: organization_slug
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Organization slug
+      example: my-organization
+  securitySchemes:
+    AuthToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Format: Token YOUR_AUTH_TOKEN'
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: OAuth2 Bearer token for integrations
