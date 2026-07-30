@@ -6,7 +6,20 @@ description: Sentry is a developer-first application monitoring platform that he
   replay, profiling, and release tracking for web, mobile, and backend applications
   across 22+ platforms and languages.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/sentry.png
 tags:
 - Error Monitoring
 - Debugging
@@ -18,44 +31,12 @@ created: '2026-03-18'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-- aid: sentry:sentry-error-monitoring-api
-  name: Sentry Error Monitoring API
-  description: Sentry provides error monitoring and performance tracking REST APIs
-    for software applications. APIs enable issue management, event retrieval, release
-    tracking, alert configuration, and project administration. All endpoints are scoped
-    to an organization. Current API version is v0.
-  humanURL: https://docs.sentry.io/api/
-  baseURL: https://sentry.io/api/0
-  tags:
-  - Error Monitoring
-  - Debugging
-  - Observability
-  - Application Performance Management
-  properties:
-  - type: Documentation
-    url: https://docs.sentry.io/api/
-  - type: Reference
-    url: https://docs.sentry.io/api/
-  - type: Authentication
-    url: https://docs.sentry.io/api/auth/
-  - type: RateLimits
-    url: https://docs.sentry.io/api/ratelimits/
-  - type: GettingStarted
-    url: https://docs.sentry.io/api/guides/create-auth-token/
-  - type: OpenAPI
-    url: openapi/sentry-api-openapi.yml
-  - url: graphql/sentry-graphql.md
-    type: GraphQL
-  contact:
-  - FN: Sentry Support
-    url: https://sentry.io/support/
-    email: support@sentry.io
 - aid: sentry:sentry-sdk-api
   name: Sentry SDK API
-  description: Sentry provides official SDKs for 22+ platforms including JavaScript,
-    Python, PHP, .NET, Java, Go, Ruby, Rust, Android, Apple, React Native, Unity,
-    and Unreal Engine. Each SDK provides error capture, performance monitoring, session
-    replay, and profiling capabilities.
+  description: >-
+    Sentry provides official SDKs for 22+ platforms including JavaScript, Python, PHP, .NET, Java, Go,
+    Ruby, Rust, Android, Apple, React Native, Unity, and Unreal Engine. Each SDK provides error capture,
+    performance monitoring, session replay, and profiling capabilities.
   humanURL: https://docs.sentry.io/platforms/
   tags:
   - Error Monitoring
@@ -70,10 +51,10 @@ apis:
     url: https://develop.sentry.dev/sdk/overview/
 - aid: sentry:sentry-integration-platform-api
   name: Sentry Integration Platform API
-  description: The Sentry Integration Platform API enables building public and internal
-    integrations with Sentry. Supports OAuth2 with PKCE, device authorization flow
-    for CLI/CI environments, webhook notifications, and custom alert actions for third-party
-    applications.
+  description: >-
+    The Sentry Integration Platform API enables building public and internal integrations with Sentry.
+    Supports OAuth2 with PKCE, device authorization flow for CLI/CI environments, webhook notifications,
+    and custom alert actions for third-party applications.
   humanURL: https://docs.sentry.io/api/integration/
   tags:
   - Error Monitoring
@@ -87,6 +68,138 @@ apis:
     url: https://docs.sentry.io/api/auth/
   - type: AsyncAPI
     url: asyncapi/sentry-webhooks-asyncapi.yml
+- aid: sentry:sentry-alerts-api
+  name: Sentry Alerts API
+  description: Alert rules and notifications
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Alerts
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-alerts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
+- aid: sentry:sentry-events-api
+  name: Sentry Events API
+  description: Raw error events
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-events-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
+- aid: sentry:sentry-issues-api
+  name: Sentry Issues API
+  description: Error issues and aggregated events
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Issues
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-issues-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
+- aid: sentry:sentry-organizations-api
+  name: Sentry Organizations API
+  description: Organization-level resources
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-organizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
+- aid: sentry:sentry-projects-api
+  name: Sentry Projects API
+  description: Project management
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
+- aid: sentry:sentry-releases-api
+  name: Sentry Releases API
+  description: Release and deployment tracking
+  humanURL: https://docs.sentry.io/api/
+  baseURL: https://sentry.io/api/0
+  tags:
+  - Releases
+  properties:
+  - type: OpenAPI
+    url: openapi/sentry-releases-api-openapi.yml
+  - type: Documentation
+    url: https://docs.sentry.io/api/
+  - type: Reference
+    url: https://docs.sentry.io/api/
+  - type: Authentication
+    url: https://docs.sentry.io/api/auth/
+  - type: RateLimits
+    url: https://docs.sentry.io/api/ratelimits/
+  - type: GettingStarted
+    url: https://docs.sentry.io/api/guides/create-auth-token/
+  - type: GraphQL
+    url: graphql/sentry-graphql.md
 common:
 - type: AgenticAccess
   url: agentic-access/sentry-agentic-access.yml
