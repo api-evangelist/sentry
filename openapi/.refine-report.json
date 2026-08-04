@@ -1,0 +1,24 @@
+{
+  "provider": "sentry",
+  "sources": [
+    "sentry-alerts-api-openapi.yml",
+    "sentry-events-api-openapi.yml",
+    "sentry-issues-api-openapi.yml",
+    "sentry-organizations-api-openapi.yml",
+    "sentry-projects-api-openapi.yml",
+    "sentry-releases-api-openapi.yml"
+  ],
+  "outputs": [
+    "sentry-alerts-api-openapi.yml",
+    "sentry-events-api-openapi.yml",
+    "sentry-issues-api-openapi.yml",
+    "sentry-organizations-api-openapi.yml",
+    "sentry-projects-api-openapi.yml",
+    "sentry-releases-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
