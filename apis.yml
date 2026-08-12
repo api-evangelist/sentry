@@ -275,8 +275,6 @@ common:
   url: vocabulary/sentry-vocabulary.yml
 - type: SpectralRules
   url: rules/sentry-rules.yml
-- type: Capabilities
-  url: capabilities/error-monitoring.yaml
 - type: Features
   data:
   - 'Developer: free with 5K errors, 5M spans, 50 replays'
