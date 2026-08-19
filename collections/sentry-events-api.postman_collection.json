@@ -1,0 +1,188 @@
+{
+  "item": [
+    {
+      "id": "a0d47a49-101b-49be-99fa-7fad35ce6f58",
+      "name": "Events",
+      "description": {
+        "content": "Raw error events",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4642db33-f3b3-47b7-81a7-7af28a4d3187",
+          "name": "List an issue's events",
+          "request": {
+            "name": "List an issue's events",
+            "description": {
+              "content": "Returns a list of error events bound to an issue.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "issues",
+                ":issue_id",
+                "events",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "full",
+                  "value": "false",
+                  "description": "Return full event data including stack traces"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "issue_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "05c9aee3-4faa-48e3-8d71-a817567c64ca",
+              "name": "List of events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "issues",
+                    ":issue_id",
+                    "events",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "full",
+                      "value": "false"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "issue_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"1953-08-27T09:39:59.473Z\",\n    \"dateReceived\": \"2012-06-02T18:49:15.380Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"warning\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"exception\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"template\",\n        \"data\": {}\n      }\n    ]\n  },\n  {\n    \"id\": \"string\",\n    \"eventId\": \"string\",\n    \"groupId\": \"string\",\n    \"dateCreated\": \"1984-05-21T16:28:35.886Z\",\n    \"dateReceived\": \"1999-07-22T18:35:23.549Z\",\n    \"type\": \"string\",\n    \"platform\": \"string\",\n    \"message\": \"string\",\n    \"title\": \"string\",\n    \"location\": \"string\",\n    \"culprit\": \"string\",\n    \"level\": \"error\",\n    \"tags\": [\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"key\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"string\",\n      \"username\": \"string\",\n      \"ipAddress\": \"string\"\n    },\n    \"sdk\": {\n      \"name\": \"string\",\n      \"version\": \"string\"\n    },\n    \"contexts\": {},\n    \"entries\": [\n      {\n        \"type\": \"stacktrace\",\n        \"data\": {}\n      },\n      {\n        \"type\": \"stacktrace\",\n        \"data\": {}\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sentry.io/api/0",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "42f77625-996a-421a-b4e9-73878bff6e9d",
+    "name": "Sentry Error Monitoring Alerts Events API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.\n\nContact Support:\n Name: Sentry Support",
+      "type": "text/plain"
+    }
+  }
+}

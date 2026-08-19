@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sentry Error Monitoring Alerts Events API",
+    "version": "0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List an issue's events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/issues/:issue_id/events/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "full",
+                "value": "",
+                "type": "query",
+                "description": "Return full event data including stack traces"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of error events bound to an issue."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

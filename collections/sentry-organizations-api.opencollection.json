@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sentry Error Monitoring Alerts Organizations API",
+    "version": "0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/",
+            "params": [
+              {
+                "name": "member",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to organizations where user is a member"
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to organizations where user is an owner"
+              }
+            ]
+          },
+          "docs": "Returns a list of organizations available to the authenticated user."
+        },
+        {
+          "info": {
+            "name": "Retrieve an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

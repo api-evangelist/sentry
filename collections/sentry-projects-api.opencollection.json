@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Sentry Error Monitoring Alerts Projects API",
+    "version": "0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/projects/:organization_slug/:project_slug/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "project_slug",
+                "value": "my-project",
+                "type": "path",
+                "description": "Project slug"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific project."
+        },
+        {
+          "info": {
+            "name": "List projects for an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sentry.io/api/0/organizations/:organization_slug/projects/",
+            "params": [
+              {
+                "name": "organization_slug",
+                "value": "my-organization",
+                "type": "path",
+                "description": "Organization slug"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of projects within an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

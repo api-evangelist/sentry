@@ -1,0 +1,299 @@
+{
+  "item": [
+    {
+      "id": "f54db177-40fd-4eff-87d5-0c4100507b01",
+      "name": "Releases",
+      "description": {
+        "content": "Release and deployment tracking",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "83ff5e47-5bfb-4ffa-8c21-79644386508e",
+          "name": "List releases for an organization",
+          "request": {
+            "name": "List releases for an organization",
+            "description": {
+              "content": "Returns a list of releases associated with the organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "releases",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "afcba254-934a-4c80-b0de-e4f5fa3cb91a",
+              "name": "List of releases",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "releases",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 4133,\n    \"version\": \"string\",\n    \"shortVersion\": \"string\",\n    \"dateCreated\": \"1992-06-10T20:50:44.976Z\",\n    \"dateReleased\": \"2000-08-12T17:03:42.053Z\",\n    \"firstEvent\": \"2012-05-04T10:45:30.208Z\",\n    \"lastEvent\": \"1973-05-28T05:04:04.616Z\",\n    \"newGroups\": 2175,\n    \"commitCount\": 951,\n    \"deployCount\": 4909,\n    \"projects\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      }\n    ],\n    \"ref\": \"string\",\n    \"url\": \"https://DrMxkOwtwmFjZpoxWPcgaDYNOgCJFX.rxsfLExGGsBk,UOYLyXKC.Ls7rozZMf73U2NRpNiWWox+Ikil8s82Y+h0pgq\"\n  },\n  {\n    \"id\": 7626,\n    \"version\": \"string\",\n    \"shortVersion\": \"string\",\n    \"dateCreated\": \"1989-12-12T09:45:28.520Z\",\n    \"dateReleased\": \"1947-02-11T07:45:59.063Z\",\n    \"firstEvent\": \"1996-04-13T17:27:53.931Z\",\n    \"lastEvent\": \"1958-03-20T15:04:36.835Z\",\n    \"newGroups\": 8557,\n    \"commitCount\": 1607,\n    \"deployCount\": 9721,\n    \"projects\": [\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      },\n      {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"slug\": \"string\"\n      }\n    ],\n    \"ref\": \"string\",\n    \"url\": \"http://YKlalnvodTyfEeX.cekgL3wJ7bxHONJmAH2f2LUfV54XmocWQwkL-Vfwngmx5t+AEmnit\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cac58abd-cd49-4be6-90fb-738312ddbcf7",
+          "name": "Create a release",
+          "request": {
+            "name": "Create a release",
+            "description": {
+              "content": "Creates a new release for tracking deployments and source maps.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "releases",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\",\n  \"commits\": [\n    \"<object>\",\n    \"<object>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "12f712d7-74a3-45de-abf3-a8c3ba73830c",
+              "name": "Release created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "releases",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version\": \"<string>\",\n  \"ref\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"projects\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"dateReleased\": \"<dateTime>\",\n  \"commits\": [\n    \"<object>\",\n    \"<object>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1452,\n  \"version\": \"string\",\n  \"shortVersion\": \"string\",\n  \"dateCreated\": \"2016-07-14T17:52:53.241Z\",\n  \"dateReleased\": \"1947-05-15T19:48:43.097Z\",\n  \"firstEvent\": \"1948-01-12T01:19:36.312Z\",\n  \"lastEvent\": \"1955-05-30T09:59:46.427Z\",\n  \"newGroups\": 2379,\n  \"commitCount\": 3387,\n  \"deployCount\": 2893,\n  \"projects\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"slug\": \"string\"\n    }\n  ],\n  \"ref\": \"string\",\n  \"url\": \"https://DCNXNvWuAGSiDyZscWiZBdQtQTVXzgFWB.dkDizRhv2qjzZxzQx,NPjKYKJxVTZXQ2Fgl1oned+r\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sentry.io/api/0",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f8234cc2-2e56-4c06-97f0-a7a47db06afe",
+    "name": "Sentry Error Monitoring Alerts Releases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.\n\nContact Support:\n Name: Sentry Support",
+      "type": "text/plain"
+    }
+  }
+}

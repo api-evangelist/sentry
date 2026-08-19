@@ -1,0 +1,160 @@
+{
+  "item": [
+    {
+      "id": "fd1da3d6-2868-48fe-ae23-a5d99aecb221",
+      "name": "Alerts",
+      "description": {
+        "content": "Alert rules and notifications",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5674158e-8139-4d8c-a9da-2cbe22ecab25",
+          "name": "List alert rules",
+          "request": {
+            "name": "List alert rules",
+            "description": {
+              "content": "Returns all metric and issue alert rules for an organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                ":organization_slug",
+                "alert-rules",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "project",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "organization_slug",
+                  "description": "(Required) Organization slug"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52b45497-b5a8-4cbc-a1ed-497158639382",
+              "name": "List of alert rules",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    ":organization_slug",
+                    "alert-rules",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "project",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "organization_slug",
+                      "description": "(Required) Organization slug"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"environment\": \"string\",\n    \"dataset\": \"sessions\",\n    \"query\": \"string\",\n    \"aggregate\": \"string\",\n    \"timeWindow\": 9772,\n    \"thresholdType\": 7965,\n    \"resolveThreshold\": 1067.532336715694,\n    \"projects\": [\n      \"string\",\n      \"string\"\n    ],\n    \"owner\": \"string\",\n    \"dateCreated\": \"2016-11-19T00:27:35.008Z\"\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"environment\": \"string\",\n    \"dataset\": \"transactions\",\n    \"query\": \"string\",\n    \"aggregate\": \"string\",\n    \"timeWindow\": 92,\n    \"thresholdType\": 5439,\n    \"resolveThreshold\": 9596.879336612456,\n    \"projects\": [\n      \"string\",\n      \"string\"\n    ],\n    \"owner\": \"string\",\n    \"dateCreated\": \"2024-03-19T00:11:18.319Z\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sentry.io/api/0",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2f6ce2ad-011d-450b-a92d-cc92ef8a74df",
+    "name": "Sentry Error Monitoring Alerts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.\n\nContact Support:\n Name: Sentry Support",
+      "type": "text/plain"
+    }
+  }
+}
