@@ -58,6 +58,11 @@ apis:
   humanURL: https://docs.sentry.io/api/integration/
   tags:
   - Error Monitoring
+  - Integration
+  - Webhook
+  - Authentication
+  tags_raw:
+  - Error Monitoring
   - Integrations
   - Webhooks
   - OAuth
@@ -96,6 +101,8 @@ apis:
   humanURL: https://docs.sentry.io/api/
   baseURL: https://sentry.io/api/0
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -140,6 +147,8 @@ apis:
   humanURL: https://docs.sentry.io/api/
   baseURL: https://sentry.io/api/0
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -162,6 +171,8 @@ apis:
   humanURL: https://docs.sentry.io/api/
   baseURL: https://sentry.io/api/0
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
