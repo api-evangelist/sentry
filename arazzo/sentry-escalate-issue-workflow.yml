@@ -11,8 +11,11 @@ info:
     can be read and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: sentryApi
-  url: ../openapi/sentry-api-openapi.yml
+- name: eventsApi
+  url: ../openapi/sentry-events-api-openapi.yml
+  type: openapi
+- name: issuesApi
+  url: ../openapi/sentry-issues-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: escalate-issue

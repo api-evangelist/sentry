@@ -11,8 +11,11 @@ info:
     executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: sentryApi
-  url: ../openapi/sentry-api-openapi.yml
+- name: issuesApi
+  url: ../openapi/sentry-issues-api-openapi.yml
+  type: openapi
+- name: releasesApi
+  url: ../openapi/sentry-releases-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: resolve-issues-in-release

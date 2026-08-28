@@ -12,8 +12,17 @@ info:
     description.
   version: 1.0.0
 sourceDescriptions:
-- name: sentryApi
-  url: ../openapi/sentry-api-openapi.yml
+- name: alertsApi
+  url: ../openapi/sentry-alerts-api-openapi.yml
+  type: openapi
+- name: organizationsApi
+  url: ../openapi/sentry-organizations-api-openapi.yml
+  type: openapi
+- name: projectsApi
+  url: ../openapi/sentry-projects-api-openapi.yml
+  type: openapi
+- name: releasesApi
+  url: ../openapi/sentry-releases-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: organization-survey
