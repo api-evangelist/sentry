@@ -19,6 +19,14 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "sentry-alerts-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sentry-events-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sentry-issues-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sentry-organizations-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sentry-projects-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sentry-releases-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

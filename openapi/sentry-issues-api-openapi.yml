@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Sentry Error Monitoring Alerts Issues API
   description: Sentry provides error monitoring and performance tracking REST APIs for software applications. APIs enable issue management, event retrieval, release tracking, alert configuration, and project administration. All endpoints are scoped to an organization. Current API version is v0.
@@ -200,32 +200,15 @@ paths:
                   $ref: '#/components/schemas/Event'
 components:
   schemas:
-    IssueUpdate:
+    ProjectRef:
       type: object
       properties:
-        status:
+        id:
           type: string
-          enum:
-          - resolved
-          - unresolved
-          - ignored
-          - resolvedInNextRelease
-        assignedTo:
+        name:
           type: string
-          description: User username or team slug
-        hasSeen:
-          type: boolean
-        isBookmarked:
-          type: boolean
-        isSubscribed:
-          type: boolean
-        priority:
+        slug:
           type: string
-          enum:
-          - critical
-          - high
-          - medium
-          - low
     Issue:
       type: object
       properties:
@@ -391,15 +374,32 @@ components:
                 - template
               data:
                 type: object
-    ProjectRef:
+    IssueUpdate:
       type: object
       properties:
-        id:
+        status:
           type: string
-        name:
+          enum:
+          - resolved
+          - unresolved
+          - ignored
+          - resolvedInNextRelease
+        assignedTo:
           type: string
-        slug:
+          description: User username or team slug
+        hasSeen:
+          type: boolean
+        isBookmarked:
+          type: boolean
+        isSubscribed:
+          type: boolean
+        priority:
           type: string
+          enum:
+          - critical
+          - high
+          - medium
+          - low
   parameters:
     OrganizationSlug:
       name: organization_slug
